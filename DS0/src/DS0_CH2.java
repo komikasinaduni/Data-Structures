@@ -11,13 +11,14 @@ public class DS0_CH2 {
                 if(i==0){
                     if(list[i+1]!=list[i])
                         hi[i]=0;
-                }
-                else if((list[i-1] != list[i] && i-1 > 0) || (list[i-1] != list[i] && i + 1 < list.length)) {
-                    hi[i] = 0;
-                }else if(i==list.length-1){
+                } else if(i==list.length-1){
                     if(list[i-1]!=list[i]){
                         hi[i]=0;
                         System.out.println("line 20");
+                    }
+                } else {
+                    if (list[i] != list[i-1] && list[i] != list[i+1]) {
+                        hi[i] = 0;
                     }
                 }
             }
