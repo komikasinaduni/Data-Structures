@@ -1,29 +1,32 @@
 public class DS0_CH4 {
-    public static boolean balanced (int[][] grid){
+    public static boolean balanced(int[][] grid){
+        int spots = 0;
+        for(int i = grid.length; i>0; i--){
+            spots+=i-1;
+        }
+        int li = 0;
+        int ri = 0;
+        int[] left = new int[spots];
+        int[] right = new int[spots];
         boolean x = false;
-        int hello = 0;
-        for(int i = grid.length; i>0; i++){
-            if(i== grid.length){
-                hello+=i;
-            } else{
-                hello*=i;
+        for(int i = 0; i<grid.length; i++){
+            for(int j = 0; j<grid[0].length; j++){
+                if(j<i){
+                    left[li++] = grid[i][j];
+                } else if(j>i){
+                    right[ri++] = grid[i][j];
+                }
             }
         }
-        int[] left = new int[hello];
-        int[] right = new int[hello];
-        for(int i = 0; i<left.length; i++){
-            if(i==left.length-1){
-                i+=0;
-            } else{
-                left[i] = grid[i][i+1];
-            }
+
+        int lsum = 0;
+        int rsum = 0;
+        for(int i = 0; i<spots; i++){
+            lsum+= left[i];
+            rsum+= right[i];
         }
-        for(int i = 0; i<right.length; i++){
-            if(i==right.length-1){
-                i+=0;
-            } else{
-                right[i] = grid[i][i-1];
-            }
+        if(lsum==rsum){
+            x = true;
         }
         return x;
     }
