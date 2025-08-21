@@ -1,6 +1,5 @@
 public class DS0_CH3 {
-    public static int[] fewest(int cents){
-        int[] hi = new int[10];
+    public static int[] fewest(int cents){int[] hi = new int[10];
         if (cents%10<5) {
             hi[0] = cents%5;
             hi[1] = (cents%10)/5;
