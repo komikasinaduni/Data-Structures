@@ -19,7 +19,7 @@ public class DS0_CH7_Account {
     }
 
     public boolean withdraw(double amount){
-        if(amount>balance||amount<0){
+        if(amount>balance || amount<=0){
             return false;
         } else{
             balance-=amount;

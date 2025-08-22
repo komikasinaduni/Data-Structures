@@ -9,16 +9,21 @@ public class DS0_CH7_Bank {
     }
 
     public boolean openAccount(long accountNumber, String customerName, double startingBalance){
+        for(int i = accounts.size()-1; i>=0; i--){
+            if(accounts.get(i).getAccountNumber()==accountNumber){
+                return false;
+            }
+        }
         if(startingBalance<=0){
             return false;
         } else{
-            new DS0_CH7_Account(accountNumber, customerName, startingBalance);
+            accounts.add(new DS0_CH7_Account(accountNumber, customerName, startingBalance));
             return true;
         }
     }
 
     public double closeAccount(long accountNumber){
-        for(int i = 0; i<accounts.size(); i++){
+        for(int i = accounts.size()-1; i>=0; i--){
             if(accounts.get(i).getAccountNumber()==accountNumber){
                 double hi = accounts.get(i).getBalance();
                 accounts.remove(i);
@@ -45,4 +50,7 @@ public class DS0_CH7_Bank {
         return null;
     }
 
+    public ArrayList<DS0_CH7_Account> getAccounts(){
+        return accounts;
+    }
 }
