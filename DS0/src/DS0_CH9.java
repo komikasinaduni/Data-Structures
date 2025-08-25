@@ -3,9 +3,7 @@ public class DS0_CH9 {
         if(A==B){
             return A;
         } else{
-            for(int i = A; i<=B; i++){
-
-            }
+            return A+summation(A+1, B);
         }
     }
 }
