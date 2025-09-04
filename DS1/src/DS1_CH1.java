@@ -18,10 +18,17 @@ public class DS1_CH1 {
         ArrayList<Integer> hi = new ArrayList<>();
         try{
             Scanner fromFile = new Scanner(fileName);
-
+            while(fromFile.hasNextInt()){
+                hi.add(fromFile.nextInt());
+            }
 
         } catch(Exception e){
             e.printStackTrace();
         }
+        int[] yo = new int[hi.size()];
+        for(int i = 0; i< yo.length; i++){
+            yo[i]=hi.get(i);
+        }
+        return yo;
     }
 }
