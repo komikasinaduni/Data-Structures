@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.*;
+
 public class DS1_CH3 {
     public static int[] rowSums(String fileName){
         ArrayList<Integer> hi = new ArrayList<>();
@@ -51,14 +52,25 @@ public class DS1_CH3 {
                     }
                 }
             }
-            for (int i = 0; i < wassup[0].length; i++) {
-                int colsum = 0;
-                for (int j = 0; j < wassup.length; j++) {
-                    colsum += wassup[j][i];
+                int rowIndex = 0;
+                while (fromFile.hasNextLine()) {
+                    String yo = fromFile.nextLine();
+                    if (!line.contains("X")) {
+                        String[] parts = yo.split(" ");
+                        for (int k = 0; k < parts.length; k++) {
+                            wassup[rowIndex][k] = Integer.parseInt(parts[k]);
+                        }
+                        rowIndex++;
+                    }
                 }
-                hi.add(colsum);
+                for (int i = 0; i < wassup[0].length; i++) {
+                    int colsum = 0;
+                    for (int j = 0; j < wassup.length; j++) {
+                        colsum += wassup[j][i];
+                    }
+                    hi.add(colsum);
+                }
             }
-        }
             fromFile.close();
         } catch (Exception e) {
             e.printStackTrace();
