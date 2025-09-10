@@ -31,7 +31,6 @@ public class DS1_CH3 {
         }
         return yo;
     }
-
     public static int[] columnSums(String fileName){
         ArrayList<Integer> hi = new ArrayList<>();
         try {
