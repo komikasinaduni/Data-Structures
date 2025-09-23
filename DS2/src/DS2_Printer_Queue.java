@@ -1,41 +1,36 @@
 import java.util.*;
 import java.io.*;
-
-public class DS2_Printer_Queue {
-
-    public static int[] sumLines(String fileName) {
-        ArrayList<Integer> hi = new ArrayList<>();
+public class DS2_Printer_Queue{
+    public static void main(String[] args){
+        Scanner yo = new Scanner(System.in);
+        System.out.println("Enter job file name: ");
+        String yo1 = yo.nextLine();
+        int i = 0;
+        MyQueue<Job> queue = new MyQueue<>();
         try {
-            Scanner fromFile = new Scanner(new File(fileName));
+            Scanner fromFile = new Scanner(new File(yo1));
             while (fromFile.hasNextLine()) {
                 String line = fromFile.nextLine();
                 if (!line.isEmpty()) {
                     String[] parts = line.split(",");
-                    int oh = 0;
-                    for (int i = 0; i<parts.length; i++) {
-                        oh += Integer.parseInt(parts[i]);
-                    }
-                    hi.add(oh);
+                    i++;
+                    queue.offer(new Job(i, Integer.parseInt(parts[1]), Integer.parseInt(parts[0])));
                 }
             }
             fromFile.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        int[] yo = new int[hi.size()];
-        for (int i = 0; i < hi.size(); i++) {
-            yo[i] = hi.get(i);
-        }
-        return yo;
-    }
-
-    public static void main(String[] args){
-        Scanner yo = new Scanner(System.in);
-        try{
-            File hi = new File("TicTacToe.txt");
-
-        } catch (Exception e){
-            e.printStackTrace();
+        System.out.println();
+        System.out.println();
+        int time = 0;
+        for(int j = 0; j<queue.size(); j++){
+            System.out.println("Time " + queue.element().getSumbissionTime + "s: Job # " + queue.element().getJobNumber() + "Recieved (" + queue.element().getPages() + " pages)");
+            System.out.println("Time " + queue.element().getBufferingStart() + "s: Job # " + queue.element().getJobNumber() + "Buffering Started");
+            System.out.println("Time " + queue.element().getBufferingEnd() + "s: Job # " + queue.element().getJobNumber() + "Finished Buffering and Started Printing");
+            System.out.println("Time " + queue.element().getPrintEnd() + "s: Job # " + queue.element().getJobNumber() + "Finished Printing");
+            queue.poll();
+            System.out.println();
         }
     }
 }

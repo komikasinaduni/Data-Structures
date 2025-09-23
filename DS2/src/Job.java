@@ -1,5 +1,6 @@
 
 public class Job {
+    public String getSumbissionTime;
     private int jobNumber;
     private int submissionTime;
     private int pages;
