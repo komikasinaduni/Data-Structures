@@ -23,12 +23,11 @@ public class DS2_Printer_Queue{
         }
         System.out.println();
         System.out.println();
-        int time = 0;
         for(int j = 0; j<queue.size(); j++){
-            System.out.println("Time " + queue.element().getSumbissionTime + "s: Job # " + queue.element().getJobNumber() + "Recieved (" + queue.element().getPages() + " pages)");
-            System.out.println("Time " + queue.element().getBufferingStart() + "s: Job # " + queue.element().getJobNumber() + "Buffering Started");
-            System.out.println("Time " + queue.element().getBufferingEnd() + "s: Job # " + queue.element().getJobNumber() + "Finished Buffering and Started Printing");
-            System.out.println("Time " + queue.element().getPrintEnd() + "s: Job # " + queue.element().getJobNumber() + "Finished Printing");
+            System.out.println("Time " + queue.element().getSumbissionTime + "s: Job #" + queue.element().getJobNumber() + " Received (" + queue.element().getPages() + " pages)");
+            System.out.println("Time " + queue.element().getBufferingStart() + "s: Job #" + queue.element().getJobNumber() + " Buffering Started");
+            System.out.println("Time " + queue.element().getBufferingEnd() + "s: Job #" + queue.element().getJobNumber() + " Finished Buffering and Started Printing");
+            System.out.println("Time " + queue.element().getPrintEnd() + "s: Job #" + queue.element().getJobNumber() + " Finished Printing");
             queue.poll();
             System.out.println();
         }
