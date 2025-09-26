@@ -19,6 +19,6 @@ public class DS2_Infix_Postfix_Calculator {
                 }
             }
         }
-
+        return yo2;
     }
 }
