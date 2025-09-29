@@ -3,7 +3,7 @@ import java.io.*;
 public class DS2_Printer_Queue{
     public static void main(String[] args){
         Scanner yo = new Scanner(System.in);
-        System.out.print("Enter job file name: ");
+        System.out.print("Enter job file name: \n");
         String yo1 = yo.nextLine();
         int i = 0;
         MyQueue<Job> queue = new MyQueue<>();
@@ -27,18 +27,30 @@ public class DS2_Printer_Queue{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println();
-        System.out.println();
+        System.out.print("");
+        System.out.print("");
         int herro = 0;
         int wow = queue.size();
-        int avg = 0;
+        double avg = 0;
+        int it = 0;
+        int lpe = 0;
         for(int j = 0; j<wow; j++){
+            if(queue.element().getSubmissionTime() > lpe){
+                it += queue.element().getSubmissionTime() - lpe;
+                queue.element().setBufferingStart(queue.element().getSubmissionTime());
+            } else {
+                queue.element().setBufferingStart(lpe);
+            }
+            queue.element().setBufferingEnd(queue.element().getBufferingStart()+3);
+            queue.element().setPrintStart(queue.element().getBufferingEnd());
+            queue.element().setPrintEnd(queue.element().getPrintStart()+5*queue.element().getPages());
             System.out.println("Time " + queue.element().getSubmissionTime() + "s: Job #" + queue.element().getJobNumber() + " Received (" + queue.element().getPages() + " pages)");
             System.out.println("Time " + queue.element().getBufferingStart() + "s: Job #" + queue.element().getJobNumber() + " Buffering Started");
             System.out.println("Time " + queue.element().getBufferingEnd() + "s: Job #" + queue.element().getJobNumber() + " Finished Buffering and Started Printing");
             System.out.println("Time " + queue.element().getPrintEnd() + "s: Job #" + queue.element().getJobNumber() + " Finished Printing");
-            avg+=queue.element().getPrintEnd()-queue.element().getBufferingStart();
-            herro+=queue.element().getPages();
+            lpe = queue.element().getPrintEnd();
+            herro += queue.element().getPages();
+            avg += queue.element().getPrintStart()-queue.element().getSubmissionTime();
             queue.poll();
             System.out.println();
         }
@@ -46,8 +58,8 @@ public class DS2_Printer_Queue{
         System.out.println("Printing Simulation Complete.");
         System.out.println("Total Print Jobs: " + wow);
         System.out.println("Total Pages: "+ herro);
-        System.out.println("Average Job Wait Time: " + avg + "s");
-        System.out.println("Idle Time: 0s");
+        System.out.printf("Average Job Wait Time: %.1fs\n", avg);
+        System.out.println("Idle Time: "+ it +"s");
 
     }
 }

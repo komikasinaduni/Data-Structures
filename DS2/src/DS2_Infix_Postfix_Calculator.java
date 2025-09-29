@@ -1,92 +1,87 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class DS2_Infix_Postfix_Calculator {
+    private static int popo(String op) {
+        if (op.equals("+") || op.equals("-")){
+            return 1;
+        }
+        if (op.equals("*") || op.equals("/")) {
+            return 2;
+        }
+        if (op.equals("^")) return 3;
+        return 0;
+    }
     public static String infixToPostfix(String infix){
         MyStack<String> yo = new MyStack<>();
         String[] infixr = infix.split(" ");
         ArrayList<String> yo2 = new ArrayList<>();
-
-        // PEMDAS
         for(int i = 0; i<infixr.length; i++){
-            if((infixr[i]=="+"||infixr[i]=="-"||infixr[i]=="*"||infixr[i]=="/"||infixr[i]=="^")&&!((infixr[i]=="(")||(infixr[i]==")"))){
-                if((yo.peek()=="+"||yo.peek()=="-")&&(infixr[i]=="+"||infixr[i]=="-")){
-                    yo2.add(infixr[i]);
-                } else if((yo.peek()=="+"||yo.peek()=="-")&&(infixr[i]=="*"||infixr[i]=="/")){
-                    yo2.add(infixr[i]);
-                } else if((yo.peek()=="*"||yo.peek()=="/")&&(infixr[i]=="*"||infixr[i]=="/")) {
-                    yo2.add(infixr[i]);
-                } else if((yo.peek()=="*"||yo.peek()=="/")&&(infixr[i]=="^")) {
-                    yo2.add(infixr[i]);
-                } else{
-                    yo.push(infixr[i]);
+            if (infixr[i].equals("+")||infixr[i].equals("-") || infixr[i].equals("*") || infixr[i].equals("/") || infixr[i].equals("^")) {
+                while (!yo.isEmpty() && !yo.peek().equals("(") && popo(yo.peek()) >= popo(infixr[i])) {
+                    yo2.add(yo.pop());
                 }
-            } else if((infixr[i]=="(")){
                 yo.push(infixr[i]);
-            } else if((infixr[i]==")")) {
-                int hi = yo.size();
-                for(int k = 0; k<hi; k++){
-                    if((yo.peek()=="+"||yo.peek()=="-"||yo.peek()=="*"||yo.peek()=="/"||yo.peek()=="^")) {
-                        yo2.add(yo.pop());
-                    } else if(yo.peek()=="("){
-                        yo2.remove("(");
-                        yo2.remove(")");
-                    }
+            } else if((infixr[i].equals("("))){
+                yo.push(infixr[i]);
+            } else if (infixr[i].equals(")")) {
+                while (!yo.isEmpty() && !yo.peek().equals("(")) {
+                    yo2.add(yo.pop());
+                }
+                if (!yo.isEmpty() && yo.peek().equals("(")) {
+                    yo.pop();
                 }
             }else{
                 yo2.add(infixr[i]);
             }
         }
-        int hi = yo.size();
-        for(int k = 0; k<hi; k++){
-            if((yo.peek()=="+"||yo.peek()=="-"||yo.peek()=="*"||yo.peek()=="/"||yo.peek()=="^")) {
-                yo2.add(yo.pop());
-            }
+        while(!yo.isEmpty()) {
+            yo2.add(yo.pop());
         }
         String yooo = "";
         for(int l = 0; l< yo2.size(); l++){
+            if(l==yo2.size()-1){
+                yooo+=yo2.get(l);
+                break;
+            }
             yooo+=yo2.get(l) + " ";
         }
         return yooo;
     }
-    public static String solvePostfix (String postfix){
+    public static Double solvePostfix (String postfix){
         MyStack<String> herro = new MyStack<>();
         String[] postfixr = postfix.split(" ");
         String herro2 = "";
-        // PEMDAS
-        for(int i = 0; i<postfixr.length; i++){
-            if(!(postfixr[i]=="+"||postfixr[i]=="-"||postfixr[i]=="*"||postfixr[i]=="/"||postfixr[i]=="^")){
-                herro.push(postfixr[i]);
-            } else if((postfixr[i]=="+"||postfixr[i]=="-"||postfixr[i]=="*"||postfixr[i]=="/"||postfixr[i]=="^")){
+        for (int i = 0; i < postfixr.length; i++) {
+            String tk = postfixr[i];
+            if (!(tk.equals("+")|| tk.equals("-")|| tk.equals("*")|| tk.equals("/") || tk.equals("^"))) {
+                herro.push(tk);
+            } else {
                 double wow1 = Double.parseDouble(herro.pop());
                 double wow2 = Double.parseDouble(herro.pop());
-
-                if(postfixr[i]=="+"){
-                    herro.push(String.valueOf(wow2+wow1));
-                } else if(postfixr[i]=="-"){
-                    herro.push(String.valueOf(wow2-wow1));
-                } else if(postfixr[i]=="*"){
-                    herro.push(String.valueOf(wow2*wow1));
-                } else if(postfixr[i]=="/"){
-                    herro.push(String.valueOf(wow2/wow1));
-                } else if(postfixr[i]=="^") {
-                    herro.push(String.valueOf(Math.pow(wow2, wow1)));
+                if (tk.equals("+")) {
+                    herro.push(""+(wow2+wow1));
+                } else if(tk.equals("-")) {
+                    herro.push(""+(wow2-wow1));
+                } else if(tk.equals("*")) {
+                    herro.push(""+(wow2*wow1));
+                } else if(tk.equals("/")) {
+                    herro.push(""+(wow2/wow1));
+                } else if(tk.equals("^")) {
+                    herro.push(""+Math.pow(wow2,wow1));
                 }
             }
         }
-        return herro.peek();
+        return Double.parseDouble(herro.peek());
+    }
+
+    public static void main (String[] args){
+        Scanner hi = new Scanner(System.in);
+        System.out.print("Enter an equation in infix form (separating values and operators with spaces): ");
+        String infix = hi.nextLine();
+        System.out.println();
+        System.out.println("Postfix Form: " + infixToPostfix(infix));
+        System.out.printf("Result: %.2f%n", solvePostfix(infixToPostfix(infix)));
+
     }
 }
-
-
-
-/*if((herro.peek()=="+"||herro.peek()=="-")&&(postfixr[i]=="+"||postfixr[i]=="-")){
-                    herro2+= " " + postfixr[i];
-                } else if((herro.peek()=="+"||herro.peek()=="-")&&(postfixr[i]=="*"||postfixr[i]=="/")){
-                    herro2+= " " + postfixr[i];
-                } else if((herro.peek()=="*"||herro.peek()=="/")&&(postfixr[i]=="*"||postfixr[i]=="/")) {
-                    herro2+= " " + postfixr[i];
-                } else if((herro.peek()=="*"||herro.peek()=="/")&&(postfixr[i]=="^")) {
-                    herro2+= " " + postfixr[i];
-                } else{
-                    herro.push(postfixr[i]);
-                }*/
