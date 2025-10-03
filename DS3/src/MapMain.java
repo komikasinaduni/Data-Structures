@@ -2,8 +2,7 @@
 import java.util.*;
 public class MapMain
 {
-    public static void main(String[]args)
-    {
+    public static void main(String[]args) {
         Scanner keyboard= new Scanner(System.in);
 
         int choice;
