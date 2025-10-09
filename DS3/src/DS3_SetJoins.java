@@ -36,7 +36,7 @@ public class DS3_SetJoins {
         }
         for(int i = 0; i< Union.size(); i++){
             if(wassup2.next()>wassup2.next()){
-                
+
             }
         }
         Iterator<Integer> yo2 = SetA.iterator();
