@@ -1,14 +1,17 @@
 import java.util.ArrayList;
 public class DS3_Map <K, V> implements MapInterface<K, V>{
     private ArrayList<MapEnt<K, V>> data;
+
     public DS3_Map(){
         data = new ArrayList<>();
     }
+
     public void clear() {
         data.clear();
     }
+
     public boolean containsKey(K key) {
-        for(int i = data.size()-1; i>=0; i++){
+        for(int i = data.size()-1; i>=0; i--){
             if(data.get(i).getKey()==key){
                 return true;
             }
@@ -17,7 +20,7 @@ public class DS3_Map <K, V> implements MapInterface<K, V>{
     }
 
     public boolean containsValue(V value) {
-        for(int i = data.size()-1; i>=0; i++){
+        for(int i = data.size()-1; i>=0; i--){
             if(data.get(i).getValue()==value){
                 return true;
             }
@@ -27,14 +30,14 @@ public class DS3_Map <K, V> implements MapInterface<K, V>{
 
     public DS3_Set<MapEnt<K, V>> entrySet(){
         DS3_Set<MapEnt<K, V>> yo = new DS3_Set<>();
-        for(int i = data.size()-1; i>=0; i++){
+        for(int i = data.size()-1; i>=0; i--){
             yo.add(data.get(i));
         }
         return yo;
     }
 
     public V get(K o) {
-        for(int i = data.size()-1; i>=0; i++){
+        for(int i = data.size()-1; i>=0; i--){
             if(o==data.get(i).getKey()){
                 return data.get(i).getValue();
             }
@@ -47,7 +50,7 @@ public class DS3_Map <K, V> implements MapInterface<K, V>{
     }
 
     public V put(K key, V value) {
-        for(int i = data.size()-1; i>=0; i++){
+        for(int i = data.size()-1; i>=0; i--){
             if(get(key)==get(data.get(i).getKey())){
                 V yo = data.get(i).getValue();
                 data.get(i).setValue(value);
@@ -67,6 +70,7 @@ public class DS3_Map <K, V> implements MapInterface<K, V>{
         for(int i = 0; i< data.size(); i++){
             for(int j = 0; j<data.size(); j++){
                 if(data.get(i).getKey()==data.get(j).getKey()){
+                    yo2.add(data.get(i).getKey());
                     j= data.size()-1;
                 } else{
                     yo2.add(data.get(i).getKey());
@@ -78,14 +82,21 @@ public class DS3_Map <K, V> implements MapInterface<K, V>{
 
     public ArrayList<V> values() {
         ArrayList<V> yo = new ArrayList<>();
-        for(int i = data.size()-1; i>=0; i++) {
+        for(int i = data.size()-1; i>=0; i--) {
             yo.add(get(data.get(i).getKey()));
         }
         return yo;
     }
 
     public V remove(K key) {
-        return get(key);
+        V value = null;
+        for(int i = data.size()-1; i>=0; i--) {
+            if(data.get(i).getKey()==key){
+                value = get(key);
+                data.remove(data.get(i));
+                break;
+            }
+        }
+        return value;
     }
-
 }
