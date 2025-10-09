@@ -1,7 +1,9 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
-public class DS3_Set<E> implements  SetInterface<E> {
+public class DS3_Set<E> implements SetInterface<E> {
     private ArrayList<E> data;
     public DS3_Set(){
         data=new ArrayList<>();
@@ -42,4 +44,8 @@ public class DS3_Set<E> implements  SetInterface<E> {
     public int size() {
         return data.size();
     }
+    public String toString(){
+        return data.toString();
+    }
+
 }
