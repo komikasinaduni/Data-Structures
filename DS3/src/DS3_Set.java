@@ -47,5 +47,5 @@ public class DS3_Set<E> implements SetInterface<E> {
     public String toString(){
         return data.toString();
     }
-
+    
 }
