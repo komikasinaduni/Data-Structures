@@ -1,6 +1,7 @@
-import java.util.*;
-import java.io.*;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Scanner;
 public class DS3_SetJoins {
     public static void main(String[] args){
         Scanner yo = new Scanner(System.in);
@@ -29,24 +30,28 @@ public class DS3_SetJoins {
         DS3_Set<Integer> Union = new DS3_Set<>();
         Iterator<Integer> herro = SetA.iterator();
         Iterator<Integer> wassup = SetB.iterator();
-        Iterator<Integer> wassup2 = Union.iterator();
+        DS3_Set<Integer> ooh = new DS3_Set<>();
+        Iterator<Integer> wassup2 = ooh.iterator();
         for(int i = 0; i<SetA.size(); i++){
-            int wow = 0;
-            int wow2 = 0;
-            for(int j = 0; j<SetA.size(); j++){
-                
-            }
-            if(wow>wow2){
-                Union.add(wow2);
-                Union.add(wow);
-            } else{
-                Union.add(wow);
-                Union.add(wow2);
+            ooh.add(herro.next());
+            ooh.add(wassup.next());
+        }
+        int[] arr = new int[ooh.size()];
+        for(int i = 0; i<arr.length; i++){
+            arr[i]= wassup2.next();
+        }
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j <arr.length-i-1; j++) {
+                if (arr[j]>arr[j+1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j+1];
+                    arr[j+1] = temp;
+                }
             }
         }
-        /*DS3_Set<Integer> Union2 = new DS3_Set<>();
-        Union = Union2;
-         */
+        for(int i = 0; i<arr.length; i++){
+            Union.add(arr[i]);
+        }
         Iterator<Integer> yo2 = SetA.iterator();
         Iterator<Integer> yo3 = SetB.iterator();
         System.out.println("");
