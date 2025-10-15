@@ -31,14 +31,22 @@ public class DS3_SetJoins {
         Iterator<Integer> wassup = SetB.iterator();
         Iterator<Integer> wassup2 = Union.iterator();
         for(int i = 0; i<SetA.size(); i++){
-            Union.add(herro.next());
-            Union.add(wassup.next());
-        }
-        for(int i = 0; i< Union.size(); i++){
-            if(wassup2.next()>wassup2.next()){
-
+            int wow = 0;
+            int wow2 = 0;
+            for(int j = 0; j<SetA.size(); j++){
+                
+            }
+            if(wow>wow2){
+                Union.add(wow2);
+                Union.add(wow);
+            } else{
+                Union.add(wow);
+                Union.add(wow2);
             }
         }
+        /*DS3_Set<Integer> Union2 = new DS3_Set<>();
+        Union = Union2;
+         */
         Iterator<Integer> yo2 = SetA.iterator();
         Iterator<Integer> yo3 = SetB.iterator();
         System.out.println("");
