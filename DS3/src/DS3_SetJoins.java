@@ -67,7 +67,6 @@ public class DS3_SetJoins {
                 notInB.add(wow);
             }
         }
-        
         for(int i = 0; i<SetA.size(); i++){
             int wow = yo3.next();
             if(SetA.contains(wow)){
