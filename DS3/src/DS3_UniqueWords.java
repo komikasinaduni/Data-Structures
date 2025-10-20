@@ -14,10 +14,12 @@ public class DS3_UniqueWords {
                 String line = fromFile.nextLine();
                 line= line.toLowerCase();
                 //searched this part up
-                line = line.replaceAll("[\\p{Punct}&&[^_]]", "");
-                String[] wow = line.split(" ");
+                line = line.replaceAll("[^\\p{L}\\p{Nd}\\s]", "");
+                String[] wow = line.split("\\s+");
                 for(int i = 0; i<wow.length; i++){
-                    hero.add(wow[i]);
+                    if (wow[i].length()>0) {
+                        hero.add(wow[i]);
+                    }
                 }
             }
         } catch (Exception e) {

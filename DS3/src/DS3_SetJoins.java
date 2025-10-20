@@ -31,26 +31,26 @@ public class DS3_SetJoins {
         Iterator<Integer> herro = SetA.iterator();
         Iterator<Integer> wassup = SetB.iterator();
         DS3_Set<Integer> ooh = new DS3_Set<>();
-        Iterator<Integer> wassup2 = ooh.iterator();
-        for(int i = 0; i<SetA.size(); i++){
-            ooh.add(herro.next());
-            ooh.add(wassup.next());
-        }
-        int[] arr = new int[ooh.size()];
-        for(int i = 0; i<arr.length; i++){
-            arr[i]= wassup2.next();
-        }
-        for (int i = 0; i < arr.length - 1; i++) {
-            for (int j = 0; j <arr.length-i-1; j++) {
-                if (arr[j]>arr[j+1]) {
-                    int temp = arr[j];
-                    arr[j] = arr[j+1];
-                    arr[j+1] = temp;
-                }
+        while (herro.hasNext()) {
+            Integer ok = herro.next();
+            if(ok!=null){
+                ooh.add(ok);
             }
         }
-        for(int i = 0; i<arr.length; i++){
-            Union.add(arr[i]);
+        while (wassup.hasNext()) {
+            Integer yea = wassup.next();
+            if (yea!=null){
+                ooh.add(yea);
+            }
+        }
+        ArrayList<Integer> arrList = new ArrayList<>();
+        Iterator<Integer> wassup2 = ooh.iterator();
+        while (wassup2.hasNext()) {
+            arrList.add(wassup2.next());
+        }
+        java.util.Collections.sort(arrList);
+        for (int i = 0; i < arrList.size(); i++) {
+            Union.add(arrList.get(i));
         }
         Iterator<Integer> yo2 = SetA.iterator();
         Iterator<Integer> yo3 = SetB.iterator();
@@ -59,19 +59,17 @@ public class DS3_SetJoins {
         DS3_Set<Integer> notInA = new DS3_Set<>();
         DS3_Set<Integer> notInB = new DS3_Set<>();
         System.out.println("Union: " + Union);
-        for(int i = 0; i<SetA.size(); i++){
+        while (yo2.hasNext()) {
             int wow = yo2.next();
-            if(SetB.contains(wow)){
+            if (SetB.contains(wow)) {
                 Intersection.add(wow);
             } else {
                 notInB.add(wow);
             }
         }
-        for(int i = 0; i<SetA.size(); i++){
+        while (yo3.hasNext()) {
             int wow = yo3.next();
-            if(SetA.contains(wow)){
-                i+=0;
-            } else{
+            if (!SetA.contains(wow)) {
                 notInA.add(wow);
             }
         }

@@ -12,7 +12,7 @@ public class DS3_Map <K, V> implements MapInterface<K, V>{
 
     public boolean containsKey(K key) {
         for(int i = data.size()-1; i>=0; i--){
-            if(data.get(i).getKey()==key){
+            if(data.get(i).getKey().equals(key)){
                 return true;
             }
         }
@@ -37,7 +37,7 @@ public class DS3_Map <K, V> implements MapInterface<K, V>{
     }
     public V get(K o) {
         for(int i = data.size()-1; i>=0; i--){
-            if(o==data.get(i).getKey()){
+            if(o.equals(data.get(i).getKey())){
                 return data.get(i).getValue();
             }
         }
@@ -47,17 +47,19 @@ public class DS3_Map <K, V> implements MapInterface<K, V>{
     public boolean isEmpty() {
         return data.isEmpty();
     }
+
     public V put(K key, V value) {
-        for(int i = data.size()-1; i>=0; i--){
-            if(get(key)==get(data.get(i).getKey())){
-                V yo = data.get(i).getValue();
+        for (int i = data.size()-1; i>=0; i--){
+            if (data.get(i).getKey().equals(key)){
+                V oldValue = data.get(i).getValue();
                 data.get(i).setValue(value);
-                return yo;
+                return oldValue;
             }
         }
-        data.add(new MapEnt(key, value));
+        data.add(new MapEnt<>(key, value));
         return null;
     }
+
     public int size() {
         return data.size();
     }
@@ -85,8 +87,8 @@ public class DS3_Map <K, V> implements MapInterface<K, V>{
 
     public V remove(K key) {
         V value = null;
-        for(int i = data.size()-1; i>=0; i--) {
-            if(data.get(i).getKey()==key){
+        for (int i = data.size() - 1; i >= 0; i--) {
+            if (data.get(i).getKey().equals(key)) {
                 value = get(key);
                 data.remove(data.get(i));
                 break;
