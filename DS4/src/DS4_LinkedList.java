@@ -16,19 +16,17 @@ public class DS4_LinkedList <E> implements DS4_LinkedList_Interface<E> {
     }
 
     @Override
-    public DS4_LinkedList_Node getLastNode() {
-        DS4_LinkedList_Node<E> yo = data2.getNext();
-        boolean x =true;
-        while(data2!=null) {
-            yo = data2.getNext();
-            if (yo== null) {
-                break;
-            } else {
-                data2 = data2.getNext();
-            }
+    public DS4_LinkedList_Node<E> getLastNode() {
+        if (data2 == null) {
+            return null;
+        }
+        DS4_LinkedList_Node<E> yo = data2;
+        while (yo.getNext() != null) {
+            yo = yo.getNext();
         }
         return yo;
     }
+
 
     @Override
     public E getFirst() {
@@ -37,48 +35,57 @@ public class DS4_LinkedList <E> implements DS4_LinkedList_Interface<E> {
 
     @Override
     public E getLast() {
-        DS4_LinkedList_Node<E> yo = data2.getNext();
-        boolean x =true;
-        while(data2!=null) {
-            yo = data2.getNext();
-            if (yo== null) {
-                break;
-            } else {
-                data2 = data2.getNext();
-            }
+        if (data2==null) {
+            return null;
+        }
+        DS4_LinkedList_Node<E> yo = data2;
+        while (yo.getNext()!= null) {
+            yo = yo.getNext();
         }
         return yo.getData();
     }
 
     @Override
     public E removeFirst() {
+        boolean x =true;
+        E yo = data2.getData();
+        data2.setNext(data2.getNext());
+        return yo;
 
     }
 
     @Override
     public E removeLast() {
-        DS4_LinkedList_Node<E> yo = data2.getNext();
-        boolean x =true;
-        while(data2!=null) {
-            yo = data2.getNext();
-            if (yo== null) {
-                break;
-            } else {
-                data2 = data2.getNext();
-            }
+        if (data2 == null) {
+            return null;
         }
-        data2.setData(null);
+        if (data2.getNext() == null) {
+            E data = data2.getData();
+            data2 = null;
+            return data;
+        }
+        DS4_LinkedList_Node<E> yo = data2;
+        DS4_LinkedList_Node<E> hello = null;
+        while (yo.getNext() != null) {
+            hello = yo;
+            yo = yo.getNext();
+        }
+        hello.setNext(null);
         return yo.getData();
     }
 
     @Override
     public void addFirst(E data) {
-
+        DS4_LinkedList_Node<E> yo = data2;
+        data2.setData(data);
+        data2.setNext(yo);
     }
 
     @Override
     public void addLast(E data) {
-
+        DS4_LinkedList_Node<E> yo = data2;
+        data2.setData(data);
+        data2.setNext(yo);
     }
 
     public void clear() {
