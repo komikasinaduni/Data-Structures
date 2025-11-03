@@ -8,9 +8,10 @@ public class DS4_LinkedList <E> implements DS4_LinkedList_Interface<E> {
         tail = null;
         size = 0;
     }
-
     public DS4_LinkedList(E data){
-        this.head = new DS4_LinkedList_Node<>(data);
+        head = new DS4_LinkedList_Node<>(data);
+        tail = head;
+        size = 1;
     }
 
     @Override
@@ -52,7 +53,9 @@ public class DS4_LinkedList <E> implements DS4_LinkedList_Interface<E> {
     public E removeFirst() {
         boolean x =true;
         E yo = head.getData();
-        head.setNext(head.getNext());
+        head = head.getNext();
+        if (head == null) tail = null;
+        size--;
         return yo;
 
     }
@@ -65,6 +68,8 @@ public class DS4_LinkedList <E> implements DS4_LinkedList_Interface<E> {
         if (head.getNext()==null) {
             E data = head.getData();
             head = null;
+            tail = null;
+            size = 0;
             return data;
         }
         DS4_LinkedList_Node<E> yo = head;
@@ -74,6 +79,8 @@ public class DS4_LinkedList <E> implements DS4_LinkedList_Interface<E> {
             yo = yo.getNext();
         }
         hello.setNext(null);
+        tail = hello;
+        size--;
         return yo.getData();
     }
 
@@ -189,5 +196,4 @@ public class DS4_LinkedList <E> implements DS4_LinkedList_Interface<E> {
         }
         return s;
     }
-
 }

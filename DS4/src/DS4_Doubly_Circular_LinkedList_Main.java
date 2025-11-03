@@ -1,4 +1,4 @@
-/*
+
 import java.util.Scanner;
 
 public class DS4_Doubly_Circular_LinkedList_Main
@@ -120,4 +120,3 @@ public class DS4_Doubly_Circular_LinkedList_Main
         System.out.print("\nGood Bye!!");
     }
 }
-*/
