@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -17,11 +18,21 @@ public class DS4_HashTable<K, V> implements DS4_HashTable_Interface <K, V> {
     @Override
     public void clear() {
         yo.clear();
+=======
+public class DS4_HashTable<E> implements DS4_HashTable_Interface<E> {
+    @Override
+    public void clear() {
+
+>>>>>>> Stashed changes
     }
 
     @Override
     public int size() {
+<<<<<<< Updated upstream
         return yo.size();
+=======
+        return 0;
+>>>>>>> Stashed changes
     }
 
     @Override
@@ -30,6 +41,7 @@ public class DS4_HashTable<K, V> implements DS4_HashTable_Interface <K, V> {
     }
 
     @Override
+<<<<<<< Updated upstream
     public boolean contains(K key) {
         return false;
     }
@@ -48,4 +60,19 @@ public class DS4_HashTable<K, V> implements DS4_HashTable_Interface <K, V> {
         ArrayList<K> wow = new ArrayList<>();
         return wow.iterator();
     }
+=======
+    public Object remove(Object key) {
+        return null;
+    }
+
+    @Override
+    public Object insert(Object key, Object value) {
+        return null;
+    }
+
+    @Override
+    public boolean contains(Object key) {
+        return false;
+    }
+>>>>>>> Stashed changes
 }
