@@ -1,72 +1,61 @@
-<<<<<<< Updated upstream
 import java.util.ArrayList;
 
-public class DS4_HashTable<K, V> implements DS4_HashTable_Interface<K, V>{
+public class DS4_HashTable<Integer, V> implements DS4_HashTable_Interface<Integer, V>{
     private int bucketCapacity;
     private int loadFactor;
     private int tableSize;
-    private ArrayList<ArrayList<DS4_Entry<K, V>>> yo;
+    private int tombstones;
+    private ArrayList<ArrayList<DS4_Entry<Integer, V>>> yo;
 
     public DS4_HashTable(int bucketCapacity,int loadFactor, int tableSize){
         yo = new ArrayList<>();
         this.bucketCapacity = bucketCapacity;
         this.loadFactor = loadFactor;
         this.tableSize = tableSize;
+        tombstones = 0;
     }
 
     @Override
     public void clear() {
         yo.clear();
-=======
-public class DS4_HashTable<E> implements DS4_HashTable_Interface<E> {
-    @Override
-    public void clear() {
-
->>>>>>> Stashed changes
     }
 
     @Override
     public int size() {
-<<<<<<< Updated upstream
         return yo.size();
-=======
-        return 0;
->>>>>>> Stashed changes
     }
 
     @Override
     public int tombstones() {
-        return 0;
+        return tombstones;
     }
 
     @Override
-<<<<<<< Updated upstream
-    public boolean contains(K key) {
+    public boolean contains(Integer key) {
         return false;
     }
 
     @Override
-    public V insert(K key, V value) {
-        return null;
+    public V insert(Integer key, V value) {
+        int hi = (int)key;
+        for(int i = 0; i<(hi % tableSize); i++){
+            yo.add(new ArrayList<DS4_Entry<Integer, V>>());
+        }
+        for(int i = 0; i<)
     }
 
     @Override
-    public V remove(K key) {
-        return null;
+    public V remove(Integer key) {
+        V value = null;
+        for(int i = 0; i<yo.size(); i++){
+            for(int j = 0; j<yo.get(i).size(); j++){
+                if(yo.get(i).get(j).equals(key)){
+                    value = (V) yo.get(i).get(j);
+                    yo.get(i).set(j, null);
+                }
+            }
+        }
+        tombstones++;
+        return value;
     }
-=======
-    public Object remove(Object key) {
-        return null;
-    }
-
-    @Override
-    public Object insert(Object key, Object value) {
-        return null;
-    }
-
-    @Override
-    public boolean contains(Object key) {
-        return false;
-    }
->>>>>>> Stashed changes
 }
