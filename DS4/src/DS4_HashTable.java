@@ -1,12 +1,11 @@
 import java.util.ArrayList;
 import java.util.Iterator;
-
 public class DS4_HashTable<K, V> implements DS4_HashTable_Interface<K, V> {
     private int bucketCapacity;
     private int loadFactor;
     private int tableSize;
     private int tombstones;
-    private int itemCount;
+    private int size;
     private ArrayList<ArrayList<DS4_Entry<K, V>>> yo;
 
     public DS4_HashTable(int bucketCapacity, int loadFactor, int tableSize) {
@@ -14,9 +13,9 @@ public class DS4_HashTable<K, V> implements DS4_HashTable_Interface<K, V> {
         this.loadFactor = loadFactor;
         this.tableSize = tableSize;
         this.tombstones = 0;
-        this.itemCount = 0;
+        this.size = 0;
         yo = new ArrayList<>();
-        for (int i = 0; i < tableSize; i++) {
+        for (int i = 0; i<tableSize; i++){
             yo.add(new ArrayList<>());
         }
     }
@@ -24,16 +23,16 @@ public class DS4_HashTable<K, V> implements DS4_HashTable_Interface<K, V> {
     @Override
     public void clear() {
         yo.clear();
-        for (int i = 0; i < tableSize; i++) {
+        for (int i = 0; i<tableSize; i++){
             yo.add(new ArrayList<>());
         }
-        itemCount = 0;
+        size = 0;
         tombstones = 0;
     }
 
     @Override
     public int size() {
-        return itemCount;
+        return size;
     }
 
     @Override
@@ -42,16 +41,16 @@ public class DS4_HashTable<K, V> implements DS4_HashTable_Interface<K, V> {
     }
 
     private int hash(K key) {
-        return Math.abs(key.hashCode()) % tableSize;
+        int hash = Math.abs(key.hashCode())%tableSize;
+        return hash;
     }
 
     @Override
     public boolean contains(K key) {
-        int index = hash(key);
-        int checkedBuckets = 0;
-
-        while (checkedBuckets < tableSize) {
-            ArrayList<DS4_Entry<K, V>> bucket = yo.get(index);
+        int wow = hash(key);
+        int cb = 0;
+        while (cb < tableSize) {
+            ArrayList<DS4_Entry<K, V>> bucket = yo.get(wow);
             for (DS4_Entry<K, V> entry : bucket) {
                 if (entry != null && entry.key.equals(key)) {
                     return true;
@@ -59,19 +58,18 @@ public class DS4_HashTable<K, V> implements DS4_HashTable_Interface<K, V> {
             }
             if (bucket.size() < bucketCapacity)
                 return false;
-            index = (index + 1) % tableSize;
-            checkedBuckets++;
+            wow = (wow + 1) % tableSize;
+            cb++;
         }
         return false;
     }
 
     @Override
     public V insert(K key, V value) {
-        int index = hash(key);
-        int checkedBuckets = 0;
-
-        while (checkedBuckets < tableSize) {
-            ArrayList<DS4_Entry<K, V>> bucket = yo.get(index);
+        int wow = hash(key);
+        int cb = 0;
+        while (cb<tableSize) {
+            ArrayList<DS4_Entry<K, V>> bucket = yo.get(wow);
             for (int i = 0; i < bucket.size(); i++) {
                 DS4_Entry<K, V> entry = bucket.get(i);
                 if (entry != null && entry.key.equals(key)) {
@@ -82,14 +80,14 @@ public class DS4_HashTable<K, V> implements DS4_HashTable_Interface<K, V> {
             }
             if (bucket.size() < bucketCapacity) {
                 bucket.add(new DS4_Entry<>(key, value));
-                itemCount++;
-                if ((itemCount + tombstones) >= loadFactor) {
+                size++;
+                if ((size+tombstones)>=loadFactor) {
                     rebuild();
                 }
                 return null;
             }
-            index = (index + 1) % tableSize;
-            checkedBuckets++;
+            wow = (wow+1)%tableSize;
+            cb++;
         }
 
         return null;
@@ -97,67 +95,79 @@ public class DS4_HashTable<K, V> implements DS4_HashTable_Interface<K, V> {
 
     @Override
     public V remove(K key) {
-        int index = hash(key);
-        int checkedBuckets = 0;
-
-        while (checkedBuckets < tableSize) {
-            ArrayList<DS4_Entry<K, V>> bucket = yo.get(index);
-
-            for (int i = 0; i < bucket.size(); i++) {
-                DS4_Entry<K, V> entry = bucket.get(i);
-                if (entry != null && entry.key.equals(key)) {
-                    V oldValue = entry.value;
-                    bucket.set(i, null); // tombstone
+        int wow = hash(key);
+        int yo2 = 0;
+        while (yo2<tableSize) {
+            ArrayList<DS4_Entry<K, V>> bucket = yo.get(wow);
+            for (int i = 0; i<bucket.size(); i++){
+                DS4_Entry<K, V> first = bucket.get(i);
+                if (first!=null&&first.key.equals(key)) {
+                    V old = first.value;
+                    bucket.set(i, null);
                     tombstones++;
-                    itemCount--;
-                    return oldValue;
+                    size--;
+                    return old;
                 }
             }
             if (bucket.size() < bucketCapacity)
                 return null;
-            index = (index + 1) % tableSize;
-            checkedBuckets++;
+            wow = (wow+1)%tableSize;
+            yo2++;
         }
 
         return null;
     }
     private void rebuild() {
-        ArrayList<DS4_Entry<K, V>> allEntries = new ArrayList<>();
-        for (ArrayList<DS4_Entry<K, V>> bucket : yo) {
-            for (DS4_Entry<K, V> entry : bucket) {
-                if (entry != null) {
-                    allEntries.add(entry);
+        ArrayList<DS4_Entry<K, V>> all = new ArrayList<>();
+        for(int i = 0; i<yo.size(); i++){
+            for(int j = 0; j<yo.get(i).size(); j++){
+                if(yo.get(i).get(j)!=null){
+                    all.add(yo.get(i).get(j));
                 }
             }
         }
-        tableSize *= 2;
-        loadFactor *= 2;
+        tableSize*= 2;
+        loadFactor*= 2;
         tombstones = 0;
-        itemCount = 0;
+        size = 0;
         yo.clear();
-        for (int i = 0; i < tableSize; i++) {
+        for (int i = 0; i<tableSize; i++){
             yo.add(new ArrayList<>());
         }
-        for (DS4_Entry<K, V> e : allEntries) {
-            insert(e.key, e.value);
+        for(int i = 0; i<all.size(); i++){
+            insert(all.get(i).key, all.get(i).value);
         }
     }
+
     public Iterator<K> iterator() {
         ArrayList<K> keys = new ArrayList<>();
-        for (ArrayList<DS4_Entry<K, V>> bucket : yo) {
-            for (DS4_Entry<K, V> entry : bucket) {
-                if (entry != null)
-                    keys.add(entry.key);
+        for (int i = 0; i<yo.size(); i++){
+            for(int j = 0; j<yo.get(i).size(); j++){
+                if (yo.get(i).get(j)!= null)
+                    keys.add(yo.get(i).get(j).key);
             }
         }
         return keys.iterator();
     }
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < yo.size(); i++) {
-            sb.append("Bucket ").append(i).append(": ").append(yo.get(i)).append("\n");
+        String s = "{";
+        for (int i = 0; i<yo.size(); i++) {
+            for(int j = 0; j<yo.get(i).size(); j++){
+                if(i!=yo.size()-1 && j!=yo.get(i).size()-1){
+                    s+=yo.get(i).get(j).key + "=" + yo.get(i).get(j).value + ", ";
+                }
+                else{
+                    s+=yo.get(i).get(j).key + "=" + yo.get(i).get(j).value + "}";
+                }
+            }
         }
-        return sb.toString();
+        return s;
     }
+
+    public int tableSize(){
+        return tableSize;
+    }
+
 }
