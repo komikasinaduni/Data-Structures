@@ -1,5 +1,7 @@
 public class DS5_BinarySearchTree<E extends Comparable> implements DS5_BinarySearchTree_Interface<E> {
-    DS5_BinarySearchTree_Node<E> root;
+    private DS5_BinarySearchTree_Node<E> root;
+    private boolean insert;
+    private boolean remove;
 
     public DS5_BinarySearchTree(){
         root = new DS5_BinarySearchTree_Node<>(null);
@@ -113,7 +115,7 @@ public class DS5_BinarySearchTree<E extends Comparable> implements DS5_BinarySea
 
     @Override
     public int maxDepth() {
-        return 0;
+        return height()-1;
     }
 
     @Override
@@ -123,26 +125,86 @@ public class DS5_BinarySearchTree<E extends Comparable> implements DS5_BinarySea
 
     @Override
     public int size() {
-        return 0;
+        return sizeHelper(root);
+    }
+
+    public int sizeHelper(DS5_BinarySearchTree_Node<E> wow){
+        if(wow==null){
+            return 0;
+        } else{
+            return 1+sizeHelper(wow.getLeft()) + sizeHelper(wow.getRight());
+        }
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size()==0;
     }
 
     @Override
     public boolean contains(E data) {
-        return false;
+        return containsHelper(root, data);
+    }
+
+    public boolean containsHelper(DS5_BinarySearchTree_Node<E> yo, E value){
+        if(yo==null){
+            return false;
+        }
+        if(value.equals(yo.getData())){
+            return true;
+        }
+        return containsHelper(yo.getLeft(), value) || containsHelper(yo.getRight(), value);
+
     }
 
     @Override
     public boolean insert(E data) {
-        return false;
+        insert=false;
+        root = insertHelper(root, data);
+        return insert;
+    }
+
+    public DS5_BinarySearchTree_Node<E> insertHelper(DS5_BinarySearchTree_Node<E> wow, E value) {
+        if (wow == null) {
+            insert = true;
+            return new DS5_BinarySearchTree_Node<>(value);
+        }
+        int comp = value.compareTo(wow.getData());
+        if (comp < 0) {
+            wow.setLeft(insertHelper(wow.getLeft(), value));
+        } else if (comp > 0) {
+            wow.setRight(insertHelper(wow.getRight(), value));
+        } else {
+            return wow;
+        }
+        return wow;
     }
 
     @Override
     public boolean remove(E data) {
-        return false;
+        remove = false;
+        return remove;
     }
+
+    public DS5_BinarySearchTree_Node<E> removeHelper(DS5_BinarySearchTree_Node<E> wow, E value){
+        if(wow==null){
+            return null;
+        }
+        int comp = value.compareTo(wow.getData());
+        if (comp < 0) {
+            wow.setLeft(removeHelper(wow.getLeft(), value));
+        } else if (comp > 0) {
+            wow.setRight(removeHelper(wow.getRight(), value));
+        } else {
+            remove = true;
+            if(wow.getLeft()==null){
+                return wow.getRight();
+            } else if(wow.getRight()==null){
+                return wow.getLeft();
+            }
+            DS5_BinarySearchTree_Node<E> wow2;
+        }
+        return wow;
+    }
+
 }
