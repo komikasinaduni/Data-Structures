@@ -4,7 +4,7 @@ public class DS5_BinarySearchTree<E extends Comparable> implements DS5_BinarySea
     private boolean remove;
 
     public DS5_BinarySearchTree(){
-        root = new DS5_BinarySearchTree_Node<>(null);
+        root = null;
     }
 
     public DS5_BinarySearchTree(E data){
@@ -40,7 +40,7 @@ public class DS5_BinarySearchTree<E extends Comparable> implements DS5_BinarySea
         if(temp==null)
             return "";
         else
-            return ", " +  inOrderHelper(temp.getLeft()) + temp.getData() + inOrderHelper(temp.getRight());
+            return inOrderHelper(temp.getLeft()) + ", " + temp.getData() + inOrderHelper(temp.getRight());
     }
 
     @Override
@@ -54,19 +54,23 @@ public class DS5_BinarySearchTree<E extends Comparable> implements DS5_BinarySea
         if(temp==null)
             return "";
         else
-            return ", " + inOrderHelper(temp.getLeft()) + inOrderHelper(temp.getRight()) + temp.getData();
+            return postOrderHelper(temp.getLeft()) + postOrderHelper(temp.getRight()) +  ", " + temp.getData();
     }
 
     @Override
     public E minValue() {
-        if(root==null){
+        return minValueHelper(root).getData();
+    }
+
+    public DS5_BinarySearchTree_Node<E> minValueHelper(DS5_BinarySearchTree_Node<E> node){
+        if(node==null){
             return null;
         } else{
-            DS5_BinarySearchTree_Node<E> yo = root;
+            DS5_BinarySearchTree_Node<E> yo = node;
             while(yo.getLeft()!=null){
                 yo = yo.getLeft();
             }
-            return yo.getData();
+            return yo;
         }
     }
 
@@ -84,22 +88,21 @@ public class DS5_BinarySearchTree<E extends Comparable> implements DS5_BinarySea
 
     @Override
     public int nodeDepth(E value) {
-        return nodeDepthHelper(root, new DS5_BinarySearchTree_Node<E>(value), 0);
+        return nodeDepthHelper(root, value, 0);
     }
 
-    public int nodeDepthHelper(DS5_BinarySearchTree_Node<E> yo, DS5_BinarySearchTree_Node<E> target, int cd){
+    public int nodeDepthHelper(DS5_BinarySearchTree_Node<E> yo, E target, int cd){
         if(yo==null){
             return -1;
         }
-        if(yo==target){
+        int comp = target.compareTo(yo.getData());
+        if(comp==0){
             return cd;
+        } else if(comp<0){
+            return nodeDepthHelper(yo.getLeft(), target, cd+1);
+        } else{
+            return nodeDepthHelper(yo.getRight(), target, cd+1);
         }
-        int ld = nodeDepthHelper(yo.getLeft(), target, cd+1);
-        if(ld!=-1){
-            return ld;
-        }
-        int rd = nodeDepthHelper(yo.getRight(), target, cd+1);
-        return rd;
     }
 
     @Override
@@ -108,6 +111,9 @@ public class DS5_BinarySearchTree<E extends Comparable> implements DS5_BinarySea
     }
 
     public int heightHelper(DS5_BinarySearchTree_Node<E> yo){
+        if(yo==null){
+            return 0;
+        }
         int lh = heightHelper(yo.getLeft());
         int rh = heightHelper(yo.getRight());
         return 1 + Math.max(lh, rh);
@@ -160,6 +166,9 @@ public class DS5_BinarySearchTree<E extends Comparable> implements DS5_BinarySea
     @Override
     public boolean insert(E data) {
         insert=false;
+        if (contains(data)) {
+            return false;
+        }
         root = insertHelper(root, data);
         return insert;
     }
@@ -183,6 +192,7 @@ public class DS5_BinarySearchTree<E extends Comparable> implements DS5_BinarySea
     @Override
     public boolean remove(E data) {
         remove = false;
+        root = removeHelper(root, data);
         return remove;
     }
 
@@ -191,9 +201,9 @@ public class DS5_BinarySearchTree<E extends Comparable> implements DS5_BinarySea
             return null;
         }
         int comp = value.compareTo(wow.getData());
-        if (comp < 0) {
+        if (comp<0) {
             wow.setLeft(removeHelper(wow.getLeft(), value));
-        } else if (comp > 0) {
+        } else if (comp>0) {
             wow.setRight(removeHelper(wow.getRight(), value));
         } else {
             remove = true;
@@ -202,9 +212,10 @@ public class DS5_BinarySearchTree<E extends Comparable> implements DS5_BinarySea
             } else if(wow.getRight()==null){
                 return wow.getLeft();
             }
-            DS5_BinarySearchTree_Node<E> wow2;
+            DS5_BinarySearchTree_Node<E> wow2 = minValueHelper(wow.getRight());
+            wow.setData(wow2.getData());
+            wow.setRight(removeHelper(wow.getRight(), wow.getData()));
         }
         return wow;
     }
-
 }

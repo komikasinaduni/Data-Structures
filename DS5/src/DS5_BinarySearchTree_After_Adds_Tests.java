@@ -259,7 +259,6 @@ public class DS5_BinarySearchTree_After_Adds_Tests
             Assert.assertEquals("[]",preOrder.invoke(check));
             Assert.assertEquals("[]",inOrder.invoke(check));
             Assert.assertEquals("[]",postOrder.invoke(check));
-
             Assert.assertNull(getRoot.invoke(check));
 
 
