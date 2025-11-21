@@ -126,7 +126,7 @@ public class DS5_BinarySearchTree<E extends Comparable> implements DS5_BinarySea
 
     @Override
     public void clear() {
-        root = new DS5_BinarySearchTree_Node<>(null);
+        root = null;
     }
 
     @Override
