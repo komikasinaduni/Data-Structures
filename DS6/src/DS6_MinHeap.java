@@ -1,21 +1,22 @@
 import java.util.ArrayList;
-public class DS6_MaxHeap<E extends Comparable<E>> implements DS6_HeapInterface<E> {
+
+public class DS6_MinHeap<E extends Comparable<E>> implements DS6_HeapInterface<E> {
+
     private ArrayList<E> heap;
-    public DS6_MaxHeap() {
+
+    public DS6_MinHeap() {
         heap = new ArrayList<>();
     }
 
     @Override
     public void insert(E item) {
         heap.add(item);
-        heapifyUp(heap.size()-1);
+        heapifyUp(heap.size() - 1);
     }
 
     @Override
     public E remove() {
-        if (heap.isEmpty()){
-            return null;
-        }
+        if (heap.isEmpty()) return null;
         E root = heap.get(0);
         heap.set(0, heap.get(heap.size()-1));
         heap.remove(heap.size()-1);
@@ -47,10 +48,10 @@ public class DS6_MaxHeap<E extends Comparable<E>> implements DS6_HeapInterface<E
 
     private void heapifyUp(int index) {
         while (index>0) {
-            int p = (index-1)/2;
-            if (heap.get(index).compareTo(heap.get(p))>0) {
-                swap(index, p);
-                index = p;
+            int parent = (index-1)/2;
+            if (heap.get(index).compareTo(heap.get(parent))<0) {
+                swap(index, parent);
+                index = parent;
             } else {
                 return;
             }
@@ -59,21 +60,19 @@ public class DS6_MaxHeap<E extends Comparable<E>> implements DS6_HeapInterface<E
 
     private void heapifyDown(int index) {
         int size = heap.size();
-        while(true) {
-            int l = (index*2)+1;
-            int r = (index*2)+2;
-            int largest = index;
-            if (l<size && heap.get(l).compareTo(heap.get(largest))>0) {
-                largest = l;
+        while (true) {
+            int left = (index * 2)+1;
+            int right = (index * 2)+2;
+            int smallest = index;
+            if (left<size && heap.get(left).compareTo(heap.get(smallest))<0) {
+                smallest = left;
             }
-            if (r<size && heap.get(r).compareTo(heap.get(largest))>0) {
-                largest = r;
+            if (right<size && heap.get(right).compareTo(heap.get(smallest))<0) {
+                smallest = right;
             }
-            if (largest==index) {
-                return;
-            }
-            swap(index, largest);
-            index = largest;
+            if (smallest==index) return;
+            swap(index, smallest);
+            index = smallest;
         }
     }
 
@@ -81,5 +80,9 @@ public class DS6_MaxHeap<E extends Comparable<E>> implements DS6_HeapInterface<E
         E temp = heap.get(a);
         heap.set(a, heap.get(b));
         heap.set(b, temp);
+    }
+
+    public E get(int x) {
+        return heap.get(x);
     }
 }
