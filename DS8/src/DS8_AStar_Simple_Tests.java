@@ -1,5 +1,4 @@
-/*
-import SolutionsAndTests.CS_DS.u8.ChallengeSet3.DS8_TerrainCost;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -221,4 +220,3 @@ public class DS8_AStar_Simple_Tests
                 (a.y == b.y &&(a.x==b.x-1 || a.x==b.x+1)));
     }
 }
-*/

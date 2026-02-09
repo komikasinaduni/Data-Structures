@@ -1,5 +1,4 @@
-/*
-import SolutionsAndTests.CS_DS.u8.ChallengeSet4.DS8_Path_Solution;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -235,5 +234,3 @@ public class DS8_Graphs_Bridges_Tests {
     }
 
 }
-
- */
