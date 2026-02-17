@@ -1,6 +1,5 @@
 package Calculator;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 
 public class CalcFrame extends JFrame {
     private JTextField txt_operand1 = new JFormattedTextField();
@@ -52,19 +51,21 @@ public class CalcFrame extends JFrame {
         add(btn_two);
         btn_two.addActionListener(e -> twoClicked());
 
-        btn_three.setBounds(75, 100, 45, 45);
+
+
+        btn_three.setBounds(20, 153, 45, 45);
         add(btn_three);
         btn_three.addActionListener(e -> threeClicked());
 
-        btn_four.setBounds(75, 100, 45, 45);
+        btn_four.setBounds(75, 153, 45, 45);
         add(btn_four);
         btn_four.addActionListener(e -> fourClicked());
 
-        btn_five.setBounds(75, 100, 45, 45);
+        btn_five.setBounds(130, 153, 45, 45);
         add(btn_five);
         btn_five.addActionListener(e -> fiveClicked());
 
-        btn_six.setBounds(75, 100, 45, 45);
+        btn_six.setBounds(185, 153, 45, 45);
         add(btn_six);
         btn_six.addActionListener(e -> sixClicked());
 
@@ -122,9 +123,11 @@ public class CalcFrame extends JFrame {
     public void nineClicked(){
         txt_operand1.setText(txt_operand1.getText()+ "9");
     }
+
     public void zeroClicked(){
         txt_operand1.setText(txt_operand1.getText()+ "0");
     }
+
     public void plusClicked(){
         if(!lbl_operand2.getText().equals("") && !txt_operand1.getText().equals("")){
             double v1 = Double.parseDouble(txt_operand1.getText());
