@@ -31,7 +31,7 @@ public class CalcFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
 
-        lbl_operand2.setBounds(20, 20, 210, 20);
+        lbl_operand2.setBounds(80, 20, 210, 20);
         add(lbl_operand2);
 
         lbl_operand2.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -123,9 +123,7 @@ public class CalcFrame extends JFrame {
     public void oneClicked(){
         txt_operand1.setText(txt_operand1.getText()+ "1");
     }
-    public void twoClicked(){
-        txt_operand1.setText(txt_operand1.getText()+ "2");
-    }
+    public void twoClicked(){txt_operand1.setText(txt_operand1.getText()+ "2");}
     public void threeClicked(){
         txt_operand1.setText(txt_operand1.getText()+ "3");
     }
@@ -150,6 +148,7 @@ public class CalcFrame extends JFrame {
     public void zeroClicked(){
         txt_operand1.setText(txt_operand1.getText()+ "0");
     }
+
     public void plusClicked(){
         if(!lbl_operand2.getText().equals("") &&
                 !txt_operand1.getText().equals("") &&
@@ -162,13 +161,13 @@ public class CalcFrame extends JFrame {
             double v1 = Double.parseDouble(txt_operand1.getText());
             double v2 = Double.parseDouble(lbl_operand2.getText());
             if(lbl_operation.getText().equals("+")){
-                lbl_operand2.setText("" + (v2 + v1));
+                lbl_operand2.setText("" + (v2+v1));
             } else if(lbl_operation.getText().equals("-")){
-                lbl_operand2.setText("" + (v2 - v1));
+                lbl_operand2.setText("" + (v2-v1));
             } else if(lbl_operation.getText().equals("*")){
-                lbl_operand2.setText("" + (v2 * v1));
+                lbl_operand2.setText("" + (v2*v1));
             } else if(lbl_operation.getText().equals("/")){
-                lbl_operand2.setText("" + (v2 / v1));
+                lbl_operand2.setText("" + (v2/v1));
             }
             txt_operand1.setText("");
         } else if(!txt_operand1.getText().equals("")){
@@ -215,6 +214,7 @@ public class CalcFrame extends JFrame {
                 !txt_operand1.getText().equals("-.")) {
             double v1 = Double.parseDouble(txt_operand1.getText());
             double v2 = Double.parseDouble(lbl_operand2.getText());
+
             if(lbl_operation.getText().equals("+")){
                 lbl_operand2.setText("" + (v2 + v1));
             } else if(lbl_operation.getText().equals("-")){
@@ -242,7 +242,7 @@ public class CalcFrame extends JFrame {
                 !txt_operand1.getText().equals("-.")) {
             double v1 = Double.parseDouble(txt_operand1.getText());
             double v2 = Double.parseDouble(lbl_operand2.getText());
-            if(lbl_operation.getText().equals("+")){
+            if (lbl_operation.getText().equals("+")){
                 lbl_operand2.setText("" + (v2 + v1));
             } else if(lbl_operation.getText().equals("-")){
                 lbl_operand2.setText("" + (v2 - v1));
@@ -279,10 +279,12 @@ public class CalcFrame extends JFrame {
                 txt_operand1.setText("" + (v1+v2));
             } else if(lbl_operation.getText().equals("-")) {
                 txt_operand1.setText("" + (v2-v1));
-            } else if(lbl_operation.getText().equals("/")) {
+            } else if(lbl_operation.getText().equals("/") && v1!=0) {
                 txt_operand1.setText("" + (v2/v1));
             } else if(lbl_operation.getText().equals("*")) {
                 txt_operand1.setText("" + (v1*v2));
+            } else if(lbl_operation.getText().equals("/") && v1==0){
+                txt_operand1.setText("Error");
             }
             lbl_operation.setText("");
             lbl_operand2.setText("");
