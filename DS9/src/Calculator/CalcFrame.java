@@ -6,7 +6,6 @@ public class CalcFrame extends JFrame {
     private JTextField txt_operand1 = new JFormattedTextField();
     private JLabel lbl_operation = new JLabel();
     private JLabel lbl_operand2 = new JLabel();
-
     private JButton btn_one = new JButton("1");
     private JButton btn_two = new JButton("2");
     private JButton btn_three = new JButton("3");
