@@ -2,6 +2,7 @@ package Calculator;
 import javax.swing.*;
 
 public class CalcFrame extends JFrame {
+    private boolean justCalculated = false;
     private JTextField txt_operand1 = new JFormattedTextField();
     private JLabel lbl_operation = new JLabel();
     private JLabel lbl_operand2 = new JLabel();
@@ -121,35 +122,90 @@ public class CalcFrame extends JFrame {
     }
 
     public void oneClicked(){
-        txt_operand1.setText(txt_operand1.getText()+ "1");
+        if(justCalculated){
+            txt_operand1.setText("1");
+            justCalculated = false;
+        } else {
+            txt_operand1.setText(txt_operand1.getText() + "1");
+        }
     }
-    public void twoClicked(){txt_operand1.setText(txt_operand1.getText()+ "2");}
+    public void twoClicked(){
+        if(justCalculated){
+            txt_operand1.setText("2");
+            justCalculated = false;
+        } else {
+            txt_operand1.setText(txt_operand1.getText() + "2");
+        }
+    }
     public void threeClicked(){
-        txt_operand1.setText(txt_operand1.getText()+ "3");
+        if(justCalculated){
+            txt_operand1.setText("3");
+            justCalculated = false;
+        } else {
+            txt_operand1.setText(txt_operand1.getText() + "3");
+        }
     }
     public void fourClicked(){
-        txt_operand1.setText(txt_operand1.getText()+ "4");
+        if(justCalculated){
+            txt_operand1.setText("4");
+            justCalculated = false;
+        } else {
+            txt_operand1.setText(txt_operand1.getText() + "4");
+        }
     }
     public void fiveClicked(){
-        txt_operand1.setText(txt_operand1.getText()+ "5");
+        if(justCalculated){
+            txt_operand1.setText("5");
+            justCalculated = false;
+        } else {
+            txt_operand1.setText(txt_operand1.getText() + "5");
+        }
     }
     public void sixClicked(){
-        txt_operand1.setText(txt_operand1.getText()+ "6");
+        if(justCalculated){
+            txt_operand1.setText("6");
+            justCalculated = false;
+        } else {
+            txt_operand1.setText(txt_operand1.getText() + "6");
+        }
     }
     public void sevenClicked(){
-        txt_operand1.setText(txt_operand1.getText()+ "7");
+        if(justCalculated){
+            txt_operand1.setText("7");
+            justCalculated = false;
+        } else {
+            txt_operand1.setText(txt_operand1.getText() + "7");
+        }
     }
     public void eightClicked(){
-        txt_operand1.setText(txt_operand1.getText()+ "8");
+        if(justCalculated){
+            txt_operand1.setText("8");
+            justCalculated = false;
+        } else {
+            txt_operand1.setText(txt_operand1.getText() + "8");
+        }
     }
     public void nineClicked(){
-        txt_operand1.setText(txt_operand1.getText()+ "9");
+        if(justCalculated){
+            txt_operand1.setText("9");
+            justCalculated = false;
+        } else {
+            txt_operand1.setText(txt_operand1.getText() + "9");
+        }
     }
     public void zeroClicked(){
-        txt_operand1.setText(txt_operand1.getText()+ "0");
+        if(justCalculated){
+            txt_operand1.setText("0");
+            justCalculated = false;
+        } else {
+            txt_operand1.setText(txt_operand1.getText() + "0");
+        }
     }
 
     public void plusClicked(){
+        if(txt_operand1.getText().equals("")){
+            txt_operand1.setText("0");
+        }
         if(!lbl_operand2.getText().equals("") &&
                 !txt_operand1.getText().equals("") &&
                 !lbl_operand2.getText().equals(".") &&
@@ -177,6 +233,9 @@ public class CalcFrame extends JFrame {
         lbl_operation.setText("+");
     }
     public void minusClicked(){
+        if(txt_operand1.getText().equals("")){
+            txt_operand1.setText("0");
+        }
         if(!lbl_operand2.getText().equals("") &&
                 !txt_operand1.getText().equals("") &&
                 !lbl_operand2.getText().equals(".") &&
@@ -204,6 +263,9 @@ public class CalcFrame extends JFrame {
         lbl_operation.setText("-");
     }
     public void multiplyClicked(){
+        if(txt_operand1.getText().equals("")){
+            txt_operand1.setText("0");
+        }
         if(!lbl_operand2.getText().equals("") &&
                 !txt_operand1.getText().equals("") &&
                 !lbl_operand2.getText().equals(".") &&
@@ -232,6 +294,9 @@ public class CalcFrame extends JFrame {
         lbl_operation.setText("*");
     }
     public void divideClicked(){
+        if(txt_operand1.getText().equals("")){
+            txt_operand1.setText("0");
+        }
         if(!lbl_operand2.getText().equals("") &&
                 !txt_operand1.getText().equals("") &&
                 !lbl_operand2.getText().equals(".") &&
@@ -265,6 +330,11 @@ public class CalcFrame extends JFrame {
         lbl_operation.setText("");
     }
     public void equalClicked(){
+        if(lbl_operation.getText().equals("") == false &&
+                lbl_operand2.getText().equals("") == false &&
+                txt_operand1.getText().equals("")){
+            txt_operand1.setText("0");
+        }
         if(!lbl_operand2.getText().equals("") &&
                 !txt_operand1.getText().equals("") &&
                 !lbl_operand2.getText().equals(".") &&
@@ -273,6 +343,13 @@ public class CalcFrame extends JFrame {
                 !txt_operand1.getText().equals("-") &&
                 !lbl_operand2.getText().equals("-.") &&
                 !txt_operand1.getText().equals("-.")) {
+            if(lbl_operation.getText().equals("") || lbl_operand2.getText().equals("")){
+                txt_operand1.setText("Error");
+                lbl_operation.setText("");
+                lbl_operand2.setText("");
+                return;
+            }
+
             double v1 = Double.parseDouble(txt_operand1.getText());
             double v2 = Double.parseDouble(lbl_operand2.getText());
             if(lbl_operation.getText().equals("+")) {
@@ -288,6 +365,7 @@ public class CalcFrame extends JFrame {
             }
             lbl_operation.setText("");
             lbl_operand2.setText("");
+            justCalculated = true;
         }
     }
     public void decimalClicked(){
