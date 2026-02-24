@@ -39,7 +39,6 @@ public class FinalCalc extends JFrame{
         txt_termweight.setText(85+"");
         add(txt_termweight);
 
-
         lbl_finalweight.setBounds(20, 60, 140, 30);
         add(lbl_finalweight);
         txt_finalweight.setBounds(145, 60, 140, 30);
@@ -89,7 +88,7 @@ public class FinalCalc extends JFrame{
         gradeRequiredOnFinal.setBounds(40, 380, 400, 20);
         add(gradeRequiredOnFinal);
 
-        getGradeRequiredOnFinal.setBounds(40, 400, 400, 500);
+        getGradeRequiredOnFinal.setBounds(60, 160, 400, 500);
         add(getGradeRequiredOnFinal);
 
         lbl_term2.setEnabled(false);
@@ -115,7 +114,8 @@ public class FinalCalc extends JFrame{
         clear.setBounds(10, 350, 270, 30);
         add(clear);
         clear.addActionListener(e -> clearClicked());
-
+        cnb_numTerms.setSelectedIndex(0);
+        changeTerms();
         setVisible(true);
     }
 
@@ -160,76 +160,47 @@ public class FinalCalc extends JFrame{
         String termWeightText = txt_termweight.getText();
         String finalWeightText = txt_finalweight.getText();
         String gradeWantedText = txt_gradewanted.getText();
-        if(termWeightText.equals("") || finalWeightText.equals("") || gradeWantedText.equals("")){
-            getGradeRequiredOnFinal.setText("Invalid input.");
-            return;
-        }
-        String[] fields = {termWeightText, finalWeightText, gradeWantedText};
-        for(int i = 0; i < fields.length; i++){
-            int decimalCount = 0;
-            for(int j = 0; j < fields[i].length(); j++){
-                char c = fields[i].charAt(j);
-                if(c == '.'){
-                    decimalCount++;
-                    if(decimalCount > 1){
-                        getGradeRequiredOnFinal.setText("Invalid input.");
-                        return;
-                    }
-                }
-                else if(c == '-'){
-                    if(j != 0){
-                        getGradeRequiredOnFinal.setText("Invalid input.");
-                        return;
-                    }
-                }
-                else if(!Character.isDigit(c)){
-                    getGradeRequiredOnFinal.setText("Invalid input.");
-                    return;
-                }
-            }
-        }
-        JTextField[] terms = {txt_term1, txt_term2, txt_term3, txt_term4, txt_term5};
-        for(int i = 0; i < selected; i++){
-            String text = terms[i].getText();
-            if(text.equals("")){
-                getGradeRequiredOnFinal.setText("Invalid input.");
-                return;
-            }
-            int decimalCount = 0;
-            for(int j = 0; j < text.length(); j++){
-                char c = text.charAt(j);
 
-                if(c == '.'){
-                    decimalCount++;
-                    if(decimalCount > 1){
-                        getGradeRequiredOnFinal.setText("Invalid input.");
-                        return;
-                    }
-                }
-                else if(c == '-'){
-                    if(j != 0){
-                        getGradeRequiredOnFinal.setText("Invalid input.");
-                        return;
-                    }
-                }
-                else if(!Character.isDigit(c)){
-                    getGradeRequiredOnFinal.setText("Invalid input.");
-                    return;
-                }
-            }
+        if(termWeightText.equals("")||finalWeightText.equals("")||gradeWantedText.equals("")){
+            JOptionPane.showMessageDialog(this,"A required field is blank.");
+            getGradeRequiredOnFinal.setText("");
+            return;
         }
         double termWeight = Double.parseDouble(termWeightText);
         double finalWeight = Double.parseDouble(finalWeightText);
+        if(termWeight + finalWeight != 100){
+            JOptionPane.showMessageDialog(this,"Term weight and Final weight must add up to 100.");
+            getGradeRequiredOnFinal.setText("");
+            return;
+        }
+        JTextField[] terms = {txt_term1, txt_term2, txt_term3, txt_term4, txt_term5};
+        for(int i = 0; i < selected; i++){
+            if(terms[i].getText().equals("")){
+                JOptionPane.showMessageDialog(this,"A required term grade is blank.");
+                getGradeRequiredOnFinal.setText("");
+                return;
+            }
+        }
         double gradeWanted = Double.parseDouble(gradeWantedText);
         double sum = 0;
-        if(selected >= 1) sum += Double.parseDouble(txt_term1.getText());
-        if(selected >= 2) sum += Double.parseDouble(txt_term2.getText());
-        if(selected >= 3) sum += Double.parseDouble(txt_term3.getText());
-        if(selected >= 4) sum += Double.parseDouble(txt_term4.getText());
-        if(selected >= 5) sum += Double.parseDouble(txt_term5.getText());
-        double currentAverage = sum / selected;
-        double requiredFinal = (gradeWanted * 100 - currentAverage * termWeight)/finalWeight;
-        getGradeRequiredOnFinal.setText(String.format("You need %.2f on the final.", requiredFinal));
+        if(selected>=1) {
+            sum += Double.parseDouble(txt_term1.getText());
+        }
+        if(selected>=2) {
+            sum += Double.parseDouble(txt_term2.getText());
+        }
+        if(selected>=3) {
+            sum += Double.parseDouble(txt_term3.getText());
+        }
+        if(selected>=4) {
+            sum += Double.parseDouble(txt_term4.getText());
+        }
+        if(selected>=5) {
+            sum += Double.parseDouble(txt_term5.getText());
+        }
+        double currentAverage = sum/selected;
+        double requiredFinal = (gradeWanted*100 - currentAverage*termWeight)/finalWeight;
+        getGradeRequiredOnFinal.setText(requiredFinal+"");
     }
 
     public void clearClicked(){
@@ -238,8 +209,6 @@ public class FinalCalc extends JFrame{
         txt_term3.setText("");
         txt_term4.setText("");
         txt_term5.setText("");
-        txt_gradewanted.setText("");
-        cnb_numTerms.setSelectedIndex(0);
-        changeTerms();
+        getGradeRequiredOnFinal.setText("");
     }
 }
