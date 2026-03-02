@@ -2,15 +2,16 @@ package FinalCalculator;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.text.NumberFormat;
 
 public class FinalCalc extends JFrame{
     private JLabel lbl_numTerms = new JLabel("Number of terms:");
     private JComboBox<Integer> cnb_numTerms;
-    private JTextField txt_term1 = new JTextField();
-    private JTextField txt_term2 = new JTextField();
-    private JTextField txt_term3 = new JTextField();
-    private JTextField txt_term4 = new JTextField();
-    private JTextField txt_term5 = new JTextField();
+    private JTextField txt_term1 = new JFormattedTextField(NumberFormat.getIntegerInstance());
+    private JTextField txt_term2 = new JFormattedTextField(NumberFormat.getIntegerInstance());
+    private JTextField txt_term3 = new JFormattedTextField(NumberFormat.getIntegerInstance());
+    private JTextField txt_term4 = new JFormattedTextField(NumberFormat.getIntegerInstance());
+    private JTextField txt_term5 = new JFormattedTextField(NumberFormat.getIntegerInstance());
     private JTextField txt_termweight = new JTextField();
     private JTextField txt_finalweight = new JTextField();
     private JTextField txt_gradewanted = new JTextField();
