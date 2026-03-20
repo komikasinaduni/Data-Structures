@@ -59,14 +59,14 @@ public class IceCreamShopFrame extends JFrame {
         cmb_flavor.addItem("Coffee");
         cmb_flavor.addItem("Cinnamon");
 
-        cmb_flavor.setBounds(250,40,200,20);
+        cmb_flavor.setBounds(400,40,200,20);
         add(cmb_flavor);
 
         cmb_scoops.addItem("1 ($3.00)");
         cmb_scoops.addItem("2 ($5.50)");
         cmb_scoops.addItem("3 ($7.00)");
 
-        cmb_scoops.setBounds(250,70,200,20);
+        cmb_scoops.setBounds(400,70,200,20);
         add(cmb_scoops);
 
         ck_choc.setBounds(20,140,200,20);
