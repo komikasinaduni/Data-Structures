@@ -1,5 +1,7 @@
 package TextEditor;
+
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -19,14 +21,13 @@ public class TextEditorFrame extends JFrame {
     private JMenuItem mi_font = new JMenuItem("Font");
     private JMenuItem mi_replace = new JMenuItem("Replace");
     private JMenuItem mi_wordCount = new JMenuItem("Word Count");
+
     public TextEditorFrame(){
         setTitle("Text Editor");
         setSize(600,500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(null);
-        if(!saveDir.exists()){
-            saveDir.mkdir();
-        }
+        if(!saveDir.exists()) saveDir.mkdir();
         tabs.setBounds(0,0,600,450);
         add(tabs);
         setJMenuBar(bar);
@@ -55,8 +56,10 @@ public class TextEditorFrame extends JFrame {
         setVisible(true);
     }
 
+    public JTabbedPane getTabs() { return tabs; }
+
     public void updateMenuState(){
-        boolean hasTabs = tabs.getTabCount()>0;
+        boolean hasTabs = tabs.getTabCount() > 0;
         mi_save.setEnabled(hasTabs);
         mi_saveAs.setEnabled(hasTabs);
         mi_close.setEnabled(hasTabs);
@@ -67,9 +70,7 @@ public class TextEditorFrame extends JFrame {
 
     public FileTab getCurrent(){
         int i = tabs.getSelectedIndex();
-        if(i == -1){
-            return null;
-        }
+        if(i == -1) return null;
         return files.get(i);
     }
 
@@ -77,18 +78,11 @@ public class TextEditorFrame extends JFrame {
         int num = 1;
         while(true){
             boolean exists = false;
-            for(int i=0;i<tabs.getTabCount();i++){
-                if(tabs.getTitleAt(i).equals("Unnamed" + num)){
-                    exists = true;
-                }
-            }
+            for(int i=0;i<tabs.getTabCount();i++)
+                if(tabs.getTitleAt(i).startsWith("Unnamed" + num)) exists = true;
             File f = new File(saveDir, "Unnamed" + num);
-            if(f.exists()){
-                exists = true;
-            }
-            if(!exists){
-                return num;
-            }
+            if(f.exists()) exists = true;
+            if(!exists) return num;
             num++;
         }
     }
@@ -105,56 +99,42 @@ public class TextEditorFrame extends JFrame {
         JFileChooser chooser = new JFileChooser(saveDir);
         if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
             File file = chooser.getSelectedFile();
-            try{
-                BufferedReader br = new BufferedReader(new FileReader(file));
+            try(BufferedReader br = new BufferedReader(new FileReader(file))){
+                String fontLine = br.readLine();
+                String[] fontParts = fontLine.split(",");
+                FileTab tab = new FileTab();
+                tab.getTextArea().setFont(new Font(fontParts[0], Font.PLAIN, Integer.parseInt(fontParts[1])));
                 StringBuilder text = new StringBuilder();
                 String line;
-                while((line = br.readLine()) != null){
-                    text.append(line).append("\n");
-                }
-                FileTab tab = new FileTab();
+                while((line = br.readLine()) != null) text.append(line).append("\n");
                 tab.getTextArea().setText(text.toString());
                 tab.setFile(file);
+                tab.setSaved(true);
                 files.add(tab);
                 tabs.addTab(file.getName(), tab.getScrollPane());
                 updateMenuState();
-            }catch(Exception e){
-
-            }
+            }catch(Exception e){ e.printStackTrace(); }
         }
     }
 
     public void save(){
         FileTab tab = getCurrent();
-        if(tab == null){
-            return;
-        }
+        if(tab == null) return;
         if(tab.getFile() == null){
-            File file = new File(saveDir, tabs.getTitleAt(tabs.getSelectedIndex()));
-            try{
-                FileWriter fw = new FileWriter(file);
-                fw.write(tab.getTextArea().getText());
-                fw.close();
-                tab.setFile(file);
-            }catch(Exception e){
-
-            }
-        } else {
-            try{
-                FileWriter fw = new FileWriter(tab.getFile());
-                fw.write(tab.getTextArea().getText());
-                fw.close();
-            }catch(Exception e){
-
-            }
+            File file = new File(saveDir, tabs.getTitleAt(tabs.getSelectedIndex()).replace("*",""));
+            tab.setFile(file);
         }
+        try(FileWriter fw = new FileWriter(tab.getFile())){
+            Font f = tab.getTextArea().getFont();
+            fw.write(f.getName() + "," + f.getSize() + "\n");
+            fw.write(tab.getTextArea().getText());
+            tab.setSaved(true);
+        }catch(Exception e){ e.printStackTrace(); }
     }
 
     public void saveAs(){
         FileTab tab = getCurrent();
-        if(tab == null){
-            return;
-        }
+        if(tab == null) return;
         JFileChooser chooser = new JFileChooser(saveDir);
         if(chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
             File file = chooser.getSelectedFile();
@@ -165,45 +145,42 @@ public class TextEditorFrame extends JFrame {
     }
 
     public void closeTab(){
+        FileTab tab = getCurrent();
+        if(tab == null) return;
+        if(!tab.isSaved()){
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Unsaved data will be lost. Are you sure you want to close this file?", "Warning", JOptionPane.YES_NO_OPTION);
+            if(confirm != JOptionPane.YES_OPTION) return;
+        }
         int i = tabs.getSelectedIndex();
-        if(i==-1){
-            return;
-        }
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Unsaved data will be lost. Are you sure you want to close this file?", "Warning", JOptionPane.YES_NO_OPTION);
-        if(confirm == JOptionPane.YES_OPTION){
-            files.remove(i);
-            tabs.remove(i);
-        }
+        files.remove(i);
+        tabs.remove(i);
         updateMenuState();
     }
 
     public void exit(){
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "There are files that have not been saved, unsaved data will be lost. Are you sure you want to exit?", "Warning", JOptionPane.YES_NO_OPTION);
-
-        if(confirm == JOptionPane.YES_OPTION){
-            System.exit(0);
+        boolean hasUnsaved = files.stream().anyMatch(f -> !f.isSaved());
+        if(hasUnsaved){
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "There are files that have not been saved, unsaved data will be lost. Are you sure you want to exit?", "Warning", JOptionPane.YES_NO_OPTION);
+            if(confirm != JOptionPane.YES_OPTION) return;
         }
+        System.exit(0);
     }
+
     public void openFont(){
         FileTab tab = getCurrent();
-        if(tab != null){
-            new FontFrame(tab);
-        }
+        if(tab != null) new FontFrame(tab);
     }
+
     public void openReplace(){
         FileTab tab = getCurrent();
-        if(tab != null){
-            new ReplaceFrame(tab);
-        }
+        if(tab != null) new ReplaceFrame(tab);
     }
+
     public void wordCount(){
         FileTab tab = getCurrent();
-        if(tab == null){
-            return;
-        }
+        if(tab == null) return;
         String text = tab.getTextArea().getText().trim();
         int count = text.isEmpty() ? 0 : text.split("\\s+").length;
         JOptionPane.showMessageDialog(this, "Words: " + count);
