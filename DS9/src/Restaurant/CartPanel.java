@@ -30,6 +30,16 @@ public class CartPanel extends JPanel {
 
         bottom.add(new JLabel("Tip %"));
         txtTip = new JTextField("0");
+
+        txtTip.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent e){
+                char c = e.getKeyChar();
+
+                if(!Character.isDigit(c)){
+                    e.consume();
+                }
+            }
+        });
         bottom.add(txtTip);
 
         bottom.add(new JLabel("Subtotal"));
@@ -85,10 +95,14 @@ public class CartPanel extends JPanel {
 
         double tax = subtotal*TAX_RATE;
 
-        int tipPerc = 0;
-        try{ tipPerc = Integer.parseInt(txtTip.getText()); if(tipPerc<0) tipPerc=0; }
-        catch(Exception e){ tipPerc=0; txtTip.setText("0"); }
+        int tipPerc;
 
+        try{
+            tipPerc = Integer.parseInt(txtTip.getText());
+        } catch(Exception e){
+            tipPerc = 0;
+            txtTip.setText("0");
+        }
         double tipAmt = subtotal*tipPerc/100.0;
         double total = subtotal+tax+tipAmt;
 
