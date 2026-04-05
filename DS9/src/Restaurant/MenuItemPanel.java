@@ -31,7 +31,6 @@ public class MenuItemPanel extends JPanel {
             icon = new ImageIcon();
         }
         lblImage = new JLabel(icon);
-
         lblName = new JLabel(item.getName());
         lblName.setFont(new Font("Arial", Font.BOLD, 14));
 
