@@ -14,9 +14,12 @@ public class WumpusPlayer {
         this.col = startCol;
     }
 
-    // getters and setters
-    public int getDirection() { return direction; }
-    public void setDirection(int direction) { this.direction = direction; }
+    public int getDirection() {
+        return direction;
+    }
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
 
     public boolean hasArrow() { return arrow; }
     public void setArrow(boolean arrow) { this.arrow = arrow; }

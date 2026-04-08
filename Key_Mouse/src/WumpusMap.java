@@ -15,20 +15,15 @@ public class WumpusMap {
         for(int r = 0; r < NUM_ROWS; r++)
             for(int c = 0; c < NUM_COLS; c++)
                 grid[r][c] = new WumpusSquare();
-
-        // Ladder first
         ladderRow = rand.nextInt(NUM_ROWS);
         ladderCol = rand.nextInt(NUM_COLS);
         grid[ladderRow][ladderCol].setLadder(true);
-
-        // Place pits
         int pitsPlaced = 0;
         while(pitsPlaced < NUM_PITS){
             int r = rand.nextInt(NUM_ROWS);
             int c = rand.nextInt(NUM_COLS);
             if(!grid[r][c].hasPit() && !grid[r][c].hasLadder()){
                 grid[r][c].setPit(true);
-                // place breeze around pit
                 for(int dr=-1; dr<=1; dr++){
                     for(int dc=-1; dc<=1; dc++){
                         int nr = r+dr, nc = c+dc;
@@ -39,14 +34,11 @@ public class WumpusMap {
                 pitsPlaced++;
             }
         }
-
-        // Place Wumpus
         while(true){
             int r = rand.nextInt(NUM_ROWS);
             int c = rand.nextInt(NUM_COLS);
             if(!grid[r][c].hasPit() && !grid[r][c].hasLadder()){
                 grid[r][c].setWumpus(true);
-                // stench
                 for(int dr=-1; dr<=1; dr++){
                     for(int dc=-1; dc<=1; dc++){
                         int nr = r+dr, nc=c+dc;
@@ -57,8 +49,6 @@ public class WumpusMap {
                 break;
             }
         }
-
-        // Place gold
         while(true){
             int r = rand.nextInt(NUM_ROWS);
             int c = rand.nextInt(NUM_COLS);

@@ -5,7 +5,6 @@ public class WumpusSquare {
         pit = breeze = wumpus = deadWumpus = stench = gold = ladder = visited = false;
     }
 
-    // getters & setters
     public boolean hasPit() { return pit; }
     public void setPit(boolean pit) { this.pit = pit; }
 

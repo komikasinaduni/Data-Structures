@@ -13,10 +13,10 @@ public class WumpusPanel extends JPanel implements KeyListener {
     private WumpusPlayer player;
     private boolean cheat = false;
     private String message = "";
-    private int status = 0; // 0 playing, 1 dead, 2 won
+    private int status = 0;
 
     public WumpusPanel() {
-        setPreferredSize(new Dimension(500,550));
+        setPreferredSize(new Dimension(500,600));
         setFocusable(true);
         addKeyListener(this);
         loadImages();
@@ -27,27 +27,30 @@ public class WumpusPanel extends JPanel implements KeyListener {
 
     private void loadImages() {
         try{
-            floor = ImageIO.read(new File("Images/Floor.gif"));
-            fog = ImageIO.read(new File("Images/black.GIF"));
-            ladder = ImageIO.read(new File("Images/ladder.gif"));
-            arrow = ImageIO.read(new File("Images/arrow.gif"));
-            gold = ImageIO.read(new File("Images/gold.gif"));
-            pit = ImageIO.read(new File("Images/pit.gif"));
-            breeze = ImageIO.read(new File("Images/breeze.gif"));
-            wumpus = ImageIO.read(new File("Images/wumpus.gif"));
-            deadWumpus = ImageIO.read(new File("Images/deadwumpus.GIF"));
-            stench = ImageIO.read(new File("Images/stench.gif"));
-            playerUp = ImageIO.read(new File("Images/playerUp.png"));
-            playerDown = ImageIO.read(new File("Images/playerDown.png"));
-            playerLeft = ImageIO.read(new File("Images/playerLeft.png"));
-            playerRight = ImageIO.read(new File("Images/playerRight.png"));
-        } catch(Exception e){ e.printStackTrace(); }
+            floor = ImageIO.read(new File("src\\Images\\Floor.gif"));
+            fog = ImageIO.read(new File("src\\Images\\black.GIF"));
+            ladder = ImageIO.read(new File("src\\Images\\ladder.gif"));
+            arrow = ImageIO.read(new File("src\\Images\\arrow.gif"));
+            gold = ImageIO.read(new File("src\\Images\\gold.gif"));
+            pit = ImageIO.read(new File("src\\Images\\pit.gif"));
+            breeze = ImageIO.read(new File("src\\Images\\breeze.gif"));
+            wumpus = ImageIO.read(new File("src\\Images\\wumpus.gif"));
+            deadWumpus = ImageIO.read(new File("src\\Images\\deadwumpus.GIF"));
+            stench = ImageIO.read(new File("src\\Images\\stench.gif"));
+            playerUp = ImageIO.read(new File("src\\Images\\playerUp.png"));
+            playerDown = ImageIO.read(new File("src\\Images\\playerDown.png"));
+            playerLeft = ImageIO.read(new File("src\\Images\\playerLeft.png"));
+            playerRight = ImageIO.read(new File("src\\Images\\playerRight.png"));
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void paintComponent(Graphics g){
+        JTextArea messagesDialog = new JTextArea();
+        messagesDialog.setBounds(20, 510, 50, 100);
+        messagesDialog.
         super.paintComponent(g);
-
-        // draw grid
         for(int r=0; r<10; r++){
             for(int c=0; c<10; c++){
                 int x = c*TILE_SIZE;
@@ -57,22 +60,29 @@ public class WumpusPanel extends JPanel implements KeyListener {
                     g.drawImage(fog, x, y, null);
             }
         }
-
-        // draw ladder
         WumpusSquare sq = map.getSquare(player.getRow(), player.getCol());
-        if(sq.hasLadder()) g.drawImage(ladder, player.getCol()*TILE_SIZE, player.getRow()*TILE_SIZE, null);
-
-        // draw player
+        if(sq.hasLadder()) {
+            g.drawImage(ladder, player.getCol()*TILE_SIZE, player.getRow()*TILE_SIZE, null);
+        }
         BufferedImage playerImg = playerUp;
-        if(player.getDirection()==WumpusPlayer.NORTH) playerImg=playerUp;
-        else if(player.getDirection()==WumpusPlayer.SOUTH) playerImg=playerDown;
-        else if(player.getDirection()==WumpusPlayer.WEST) playerImg=playerLeft;
-        else if(player.getDirection()==WumpusPlayer.EAST) playerImg=playerRight;
+        if(player.getDirection()==WumpusPlayer.NORTH) {
+            playerImg=playerUp;
+        } else if(player.getDirection()==WumpusPlayer.SOUTH) {
+            playerImg=playerDown;
+        } else if(player.getDirection()==WumpusPlayer.WEST) {
+            playerImg=playerLeft;
+        } else if(player.getDirection()==WumpusPlayer.EAST) {
+            playerImg=playerRight;
+        }
         g.drawImage(playerImg, player.getCol()*TILE_SIZE, player.getRow()*TILE_SIZE, null);
-
-        // draw message
         g.setColor(Color.WHITE);
-        g.drawString(message, 10, 520);
+        g.drawString(message, 20, 250);
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
     }
 
     public void keyTyped(KeyEvent e){
@@ -81,33 +91,59 @@ public class WumpusPanel extends JPanel implements KeyListener {
         WumpusSquare sq = map.getSquare(r,c);
         char k = e.getKeyChar();
 
-        if(k=='w') { player.setRow(r-1); player.setDirection(WumpusPlayer.NORTH); }
-        else if(k=='s'){ player.setRow(r+1); player.setDirection(WumpusPlayer.SOUTH);}
-        else if(k=='a'){ player.setCol(c-1); player.setDirection(WumpusPlayer.WEST);}
-        else if(k=='d'){ player.setCol(c+1); player.setDirection(WumpusPlayer.EAST);}
-        else if(k=='*'){ cheat = !cheat; }
-        else if(k=='p' && sq.hasGold()){ player.setGold(true); sq.setGold(false); message="Gold picked up!"; }
-
-        // bounds
-        if(player.getRow()<0) player.setRow(0);
-        if(player.getRow()>9) player.setRow(9);
-        if(player.getCol()<0) player.setCol(0);
-        if(player.getCol()>9) player.setCol(9);
+        if(k=='w') {
+            player.setRow(r-1);
+            player.setDirection(WumpusPlayer.NORTH);
+        } else if(k=='s'){
+            player.setRow(r+1);
+            player.setDirection(WumpusPlayer.SOUTH);
+        } else if(k=='a'){
+            player.setCol(c-1); player.setDirection(WumpusPlayer.WEST);
+        } else if(k=='d'){
+            player.setCol(c+1);
+            player.setDirection(WumpusPlayer.EAST);
+        } else if(k=='*'){
+            cheat = !cheat;
+        } else if(k=='p' && sq.hasGold()){
+            player.setGold(true); sq.setGold(false);
+            message="Gold picked up!";
+        }
+        if(player.getRow()<0){
+            player.setRow(0);
+        }
+        if(player.getRow()>9) {
+            player.setRow(9);
+        }
+        if(player.getCol()<0) {
+            player.setCol(0);
+        }
+        if(player.getCol()>9) {
+            player.setCol(9);
+        }
 
         map.getSquare(player.getRow(), player.getCol()).setVisited(true);
-
-        // check for hazards
         sq = map.getSquare(player.getRow(), player.getCol());
-        if(sq.hasPit()){ message="You fell down a pit to your death!"; status=1; }
-        else if(sq.hasWumpus()){ message="You are eaten by the Wumpus!"; status=1; }
-        else if(sq.hasGold()){ message="You see a glimmer!"; }
-        else if(sq.hasBreeze()){ message="You feel a breeze."; }
-        else if(sq.hasStench()){ message="You smell a stench."; }
-        else message="";
-
+        if(sq.hasPit()){
+            message="You fell down a pit to your death!";
+            status=1;
+        } else if(sq.hasWumpus()){
+            message="You are eaten by the Wumpus!";
+            status=1;
+        } else if(sq.hasGold()){
+            message="You see a glimmer!";
+        } else if(sq.hasBreeze()){
+            message="You feel a breeze.";
+        } else if(sq.hasStench()){
+            message="You smell a stench.";
+        } else {
+            message="";
+        }
         repaint();
     }
 
-    public void keyPressed(KeyEvent e){}
-    public void keyReleased(KeyEvent e){}
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
 }
