@@ -57,6 +57,23 @@ public class WumpusPanel extends JPanel implements KeyListener {
             playerDown = ImageIO.read(new File("src/WumpusWorld/Images/playerDown.png"));
             playerLeft = ImageIO.read(new File("src/WumpusWorld/Images/playerLeft.png"));
             playerRight = ImageIO.read(new File("src/WumpusWorld/Images/playerRight.png"));
+            // For school bc apparently windows runs different than mac when loading images??
+            /*
+            floor = ImageIO.read(new File("src\\WumpusWorld\\Images\\Floor.gif"));
+            fog = ImageIO.read(new File("src\\WumpusWorld\\Images\\black.GIF"));
+            ladder = ImageIO.read(new File("src\\WumpusWorld\\Images\\ladder.gif"));
+            arrow = ImageIO.read(new File("src\\WumpusWorld\\Images\\arrow.gif"));
+            gold = ImageIO.read(new File("src\\WumpusWorld\\Images\\gold.gif"));
+            pit = ImageIO.read(new File("src\\WumpusWorld\\Images\\pit.gif"));
+            breeze = ImageIO.read(new File("src\\WumpusWorld\\Images\\breeze.gif"));
+            wumpus = ImageIO.read(new File("src\\WumpusWorld\\Images\\wumpus.gif"));
+            deadWumpus = ImageIO.read(new File("src\\WumpusWorld\\Images\\deadwumpus.GIF"));
+            stench = ImageIO.read(new File("src\\WumpusWorld\\Images\\stench.gif"));
+            playerUp = ImageIO.read(new File("src\\WumpusWorld\\Images\\playerUp.png"));
+            playerDown = ImageIO.read(new File("src\\WumpusWorld\\Images\\playerDown.png"));
+            playerLeft = ImageIO.read(new File("src\\WumpusWorld\\Images\\playerLeft.png"));
+            playerRight = ImageIO.read(new File("src\\WumpusWorld\\Images\\playerRight.png"));
+             */
         }
         catch (Exception e){
             System.out.println("Image Error: " + e.getMessage());
