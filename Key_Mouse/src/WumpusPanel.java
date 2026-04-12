@@ -1,113 +1,268 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import java.io.File;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.util.ArrayList;
 
 public class WumpusPanel extends JPanel implements KeyListener {
-    public static final int TILE_SIZE = 50;
-
-    private BufferedImage floor, fog, ladder, arrow, gold, pit, breeze, wumpus, deadWumpus, stench, playerUp, playerDown, playerLeft, playerRight;
-    private WumpusMap map;
+    public static final int PLAYING = 0;
+    public static final int DEAD = 1;
+    public static final int WON = 2;
+    private int status;
     private WumpusPlayer player;
-    private boolean cheat = false;
-    private String message = "";
-    private int status = 0; // 0 playing, 1 dead, 2 won
+    private WumpusMap map;
+    private BufferedImage buffer;
+    private boolean cheatMode = false;
+    private ArrayList<String> messages = new ArrayList<>();
+    private BufferedImage floor;
+    private BufferedImage arrow;
+    private BufferedImage fog;
+    private BufferedImage gold;
+    private BufferedImage ladder;
+    private BufferedImage pit;
+    private BufferedImage breeze;
+    private BufferedImage wumpus;
+    private BufferedImage deadWumpus;
+    private BufferedImage stench;
+    private BufferedImage playerUp;
+    private BufferedImage playerDown;
+    private BufferedImage playerLeft;
+    private BufferedImage playerRight;
 
     public WumpusPanel() {
-        setPreferredSize(new Dimension(500,550));
-        setFocusable(true);
-        addKeyListener(this);
+        this.setPreferredSize(new Dimension(550, 650));
+        this.addKeyListener(this);
+        this.setFocusable(true);
         loadImages();
-        map = new WumpusMap();
-        player = new WumpusPlayer(map.getLadderRow(), map.getLadderCol());
-        map.getSquare(player.getRow(), player.getCol()).setVisited(true);
+        reset();
     }
 
     private void loadImages() {
-        try{
-            floor = ImageIO.read(new File("Images/Floor.gif"));
-            fog = ImageIO.read(new File("Images/black.GIF"));
-            ladder = ImageIO.read(new File("Images/ladder.gif"));
-            arrow = ImageIO.read(new File("Images/arrow.gif"));
-            gold = ImageIO.read(new File("Images/gold.gif"));
-            pit = ImageIO.read(new File("Images/pit.gif"));
-            breeze = ImageIO.read(new File("Images/breeze.gif"));
-            wumpus = ImageIO.read(new File("Images/wumpus.gif"));
-            deadWumpus = ImageIO.read(new File("Images/deadwumpus.GIF"));
-            stench = ImageIO.read(new File("Images/stench.gif"));
-            playerUp = ImageIO.read(new File("Images/playerUp.png"));
-            playerDown = ImageIO.read(new File("Images/playerDown.png"));
-            playerLeft = ImageIO.read(new File("Images/playerLeft.png"));
-            playerRight = ImageIO.read(new File("Images/playerRight.png"));
-        } catch(Exception e){ e.printStackTrace(); }
-    }
-
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-
-        // draw grid
-        for(int r=0; r<10; r++){
-            for(int c=0; c<10; c++){
-                int x = c*TILE_SIZE;
-                int y = r*TILE_SIZE;
-                g.drawImage(floor, x, y, null);
-                if(!map.getSquare(r,c).isVisited() && !cheat)
-                    g.drawImage(fog, x, y, null);
-            }
+        try {
+            floor = ImageIO.read(new File("src/Images/Floor.gif"));
+            fog = ImageIO.read(new File("src/Images/black.GIF"));
+            ladder = ImageIO.read(new File("src/Images/ladder.gif"));
+            arrow = ImageIO.read(new File("src/Images/arrow.gif"));
+            gold = ImageIO.read(new File("src/Images/gold.gif"));
+            pit = ImageIO.read(new File("src/Images/pit.gif"));
+            breeze = ImageIO.read(new File("src/Images/breeze.gif"));
+            wumpus = ImageIO.read(new File("src/Images/wumpus.gif"));
+            deadWumpus = ImageIO.read(new File("src/Images/deadwumpus.GIF"));
+            stench = ImageIO.read(new File("src/Images/stench.gif"));
+            playerUp = ImageIO.read(new File("src/Images/playerUp.png"));
+            playerDown = ImageIO.read(new File("src/Images/playerDown.png"));
+            playerLeft = ImageIO.read(new File("src/Images/playerLeft.png"));
+            playerRight = ImageIO.read(new File("src/Images/playerRight.png"));
         }
-
-        // draw ladder
-        WumpusSquare sq = map.getSquare(player.getRow(), player.getCol());
-        if(sq.hasLadder()) g.drawImage(ladder, player.getCol()*TILE_SIZE, player.getRow()*TILE_SIZE, null);
-
-        // draw player
-        BufferedImage playerImg = playerUp;
-        if(player.getDirection()==WumpusPlayer.NORTH) playerImg=playerUp;
-        else if(player.getDirection()==WumpusPlayer.SOUTH) playerImg=playerDown;
-        else if(player.getDirection()==WumpusPlayer.WEST) playerImg=playerLeft;
-        else if(player.getDirection()==WumpusPlayer.EAST) playerImg=playerRight;
-        g.drawImage(playerImg, player.getCol()*TILE_SIZE, player.getRow()*TILE_SIZE, null);
-
-        // draw message
-        g.setColor(Color.WHITE);
-        g.drawString(message, 10, 520);
+        catch (Exception e){
+            System.out.println("Image Error: " + e.getMessage());
+        }
     }
 
-    public void keyTyped(KeyEvent e){
-        int r = player.getRow();
-        int c = player.getCol();
-        WumpusSquare sq = map.getSquare(r,c);
-        char k = e.getKeyChar();
-
-        if(k=='w') { player.setRow(r-1); player.setDirection(WumpusPlayer.NORTH); }
-        else if(k=='s'){ player.setRow(r+1); player.setDirection(WumpusPlayer.SOUTH);}
-        else if(k=='a'){ player.setCol(c-1); player.setDirection(WumpusPlayer.WEST);}
-        else if(k=='d'){ player.setCol(c+1); player.setDirection(WumpusPlayer.EAST);}
-        else if(k=='*'){ cheat = !cheat; }
-        else if(k=='p' && sq.hasGold()){ player.setGold(true); sq.setGold(false); message="Gold picked up!"; }
-
-        // bounds
-        if(player.getRow()<0) player.setRow(0);
-        if(player.getRow()>9) player.setRow(9);
-        if(player.getCol()<0) player.setCol(0);
-        if(player.getCol()>9) player.setCol(9);
-
-        map.getSquare(player.getRow(), player.getCol()).setVisited(true);
-
-        // check for hazards
-        sq = map.getSquare(player.getRow(), player.getCol());
-        if(sq.hasPit()){ message="You fell down a pit to your death!"; status=1; }
-        else if(sq.hasWumpus()){ message="You are eaten by the Wumpus!"; status=1; }
-        else if(sq.hasGold()){ message="You see a glimmer!"; }
-        else if(sq.hasBreeze()){ message="You feel a breeze."; }
-        else if(sq.hasStench()){ message="You smell a stench."; }
-        else message="";
-
+    public void reset() {
+        status = PLAYING;
+        map = new WumpusMap();
+        player = new WumpusPlayer();
+        player.setRow(map.getLadderRow());
+        player.setCol(map.getLadderCol());
+        updateMessages();
         repaint();
     }
 
-    public void keyPressed(KeyEvent e){}
-    public void keyReleased(KeyEvent e){}
+    private void updateMessages() {
+        if (status != PLAYING) {
+            return;
+        }
+        messages.clear();
+        WumpusSquare sq = map.getSquare(player.getRow(), player.getCol());
+        sq.setVisited(true);
+
+        if (sq.isPit()) {
+            status = DEAD;
+            messages.add("You fell down a pit to your death.");
+            messages.add("Game Over. (N for new game)");
+        } else if (sq.isWumpus()) {
+            status = DEAD;
+            messages.add("You are eaten by the Wumpus.");
+            messages.add("Game Over. (N for new game)");
+        } else {
+            if (sq.isBreeze()) {
+                messages.add("You feel a breeze.");
+            }
+            if (sq.isStench()) {
+                messages.add("You smell a stench.");
+            }
+            if (sq.isGold()) {
+                messages.add("You see a glimmer.");
+            }
+            if (sq.isLadder()) {
+                messages.add("You bump into the ladder.");
+            }
+        }
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (buffer == null) {
+            buffer = (BufferedImage) createImage(550, 650);
+        }
+        Graphics bg = buffer.getGraphics();
+        bg.setColor(Color.GRAY);
+        bg.fillRect(0, 0, 550, 650);
+        bg.setColor(Color.BLACK);
+        bg.fillRect(25, 25, 500, 500);
+        for (int r = 0; r < 10; r++) {
+            for (int c = 0; c < 10; c++) {
+                WumpusSquare sq = map.getSquare(r, c);
+                int x = 25 + (c * 50);
+                int y = 25 + (r * 50);
+                if (sq.isVisited() == false && cheatMode == false) {
+                    bg.drawImage(fog, x, y, 50, 50, null);
+                }
+                else {
+                    bg.drawImage(floor, x, y, 50, 50, null);
+                    if (sq.isPit()) bg.drawImage(pit, x, y, 50, 50, null);
+                    if (sq.isBreeze()) bg.drawImage(breeze, x, y, 50, 50, null);
+                    if (sq.isStench()) bg.drawImage(stench, x, y, 50, 50, null);
+                    if (sq.isWumpus()) bg.drawImage(wumpus, x, y, 50, 50, null);
+                    if (sq.isDeadWumpus()) bg.drawImage(deadWumpus, x, y, 50, 50, null);
+                    if (sq.isGold()) bg.drawImage(gold, x, y, 50, 50, null);
+                    if (sq.isLadder()) bg.drawImage(ladder, x, y, 50, 50, null);
+                }
+            }
+        }
+
+        BufferedImage pImg = playerUp;
+        if (player.getDirection() == 1) {
+            pImg = playerRight;
+        }
+        else if (player.getDirection() == 2) {
+            pImg = playerDown;
+        }
+        else if (player.getDirection() == 3) {
+            pImg = playerLeft;
+        }
+        bg.drawImage(pImg, 25 + (player.getCol() * 50), 25 + (player.getRow() * 50), 50, 50, null);
+        bg.setColor(Color.BLACK);
+        bg.fillRect(0, 550, 550, 100);
+        bg.setColor(Color.WHITE);
+        bg.drawLine(170, 555, 170, 645);
+        bg.setColor(Color.RED);
+        bg.setFont(new Font("Monospaced", Font.BOLD, 22));
+        bg.drawString("Inventory:", 10, 575);
+        if (player.hasArrow()) {
+            bg.drawImage(arrow, 25, 585, 20, 45, null);
+        }
+        if (player.hasGold()) {
+            bg.drawImage(gold, 70, 590, 35, 35, null);
+        }
+        bg.drawString("Messages:", 185, 575);
+        bg.setColor(Color.CYAN);
+        bg.setFont(new Font("Monospaced", Font.BOLD, 15));
+        for (int i = 0; i < messages.size(); i++) {
+            bg.drawString(messages.get(i), 185, 595 + (i * 18));
+        }
+        g.drawImage(buffer, 0, 0, null);
+    }
+
+    public void keyTyped(KeyEvent e) {
+        char k = e.getKeyChar();
+        if (k == 'n'){
+            reset();
+            return;
+        }
+        if (status != PLAYING) {
+            return;
+        }
+        int r = player.getRow();
+        int c = player.getCol();
+        boolean actionTaken = false;
+        if (k == 'w' && r > 0) {
+            player.setRow(r - 1);
+            player.setDirection(0);
+            actionTaken = true;
+        }
+        else if (k == 's' && r < 9) {
+            player.setRow(r + 1);
+            player.setDirection(2);
+            actionTaken = true;
+        }
+        else if (k == 'a' && c > 0) {
+            player.setCol(c - 1);
+            player.setDirection(3);
+            actionTaken = true;
+        }
+        else if (k == 'd' && c < 9) {
+            player.setCol(c + 1);
+            player.setDirection(1);
+            actionTaken = true;
+        }
+        else if (k == 'p' && map.getSquare(r, c).isGold()) {
+            player.setGold(true);
+            map.getSquare(r, c).setGold(false);
+            messages.add("You picked up the gold!");
+        }
+        else if (k == 'c' && map.getSquare(r, c).isLadder()) {
+            if (player.hasGold()) {
+                status = WON;
+                messages.clear();
+                messages.add("You Win. (N for new game)");
+            } else {
+                messages.add("You need the gold to climb out!");
+            }
+        } else if (k == '*') {
+            cheatMode = !cheatMode;
+        } else if (k == 'i' || k == 'j' || k == 'k' || k == 'l') {
+            shoot(k);
+        }
+        if (actionTaken) {
+            updateMessages();
+        }
+        repaint();
+    }
+
+    private void shoot(char k) {
+        if (player.hasArrow() == false) {
+            return;
+        }
+        player.setArrow(false);
+        int r = player.getRow();
+        int c = player.getCol();
+        while (r >= 0 && r < 10 && c >= 0 && c < 10) {
+            if (k == 'i') {
+                r--;
+            } else if (k == 'k') {
+                r++;
+            } else if (k == 'j') {
+                c--;
+            } else if (k == 'l') {
+                c++;
+            }
+            WumpusSquare s = map.getSquare(r, c);
+            if (s != null && s.isWumpus()) {
+                s.setWumpus(false);
+                s.setDeadWumpus(true);
+                messages.add("You hear a scream");
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        requestFocus();
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
 }

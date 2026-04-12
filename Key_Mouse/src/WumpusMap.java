@@ -1,80 +1,94 @@
-import java.util.Random;
-
-public class WumpusMap {
-    public static final int NUM_ROWS = 10, NUM_COLS = 10, NUM_PITS = 10;
+public class WumpusMap
+{
     private WumpusSquare[][] grid;
-    private int ladderRow, ladderCol;
-    private Random rand = new Random();
-
+    private int ladderRow;
+    private int ladderCol;
     public WumpusMap() {
         createMap();
     }
-
     public void createMap() {
-        grid = new WumpusSquare[NUM_ROWS][NUM_COLS];
-        for(int r = 0; r < NUM_ROWS; r++)
-            for(int c = 0; c < NUM_COLS; c++)
+        grid = new WumpusSquare[10][10];
+        for (int r = 0; r < 10; r++) {
+            for (int c = 0; c < 10; c++) {
                 grid[r][c] = new WumpusSquare();
+            }
+        }
 
-        // Ladder first
-        ladderRow = rand.nextInt(NUM_ROWS);
-        ladderCol = rand.nextInt(NUM_COLS);
+        for (int i = 0; i < 10; i++) {
+            int r = (int)(Math.random() * 10);
+            int c = (int)(Math.random() * 10);
+            grid[r][c].setPit(true);
+
+            addBreeze(r, c);
+        }
+
+        ladderRow = (int)(Math.random() * 10);
+        ladderCol = (int)(Math.random() * 10);
         grid[ladderRow][ladderCol].setLadder(true);
+        int goldR = (int)(Math.random() * 10);
+        int goldC = (int)(Math.random() * 10);
+        while (grid[goldR][goldC].isPit() || grid[goldR][goldC].isLadder()) {
+            goldR = (int)(Math.random() * 10);
+            goldC = (int)(Math.random() * 10);
+        }
+        grid[goldR][goldC].setGold(true);
+        int wumpusR = (int)(Math.random() * 10);
+        int wumpusC = (int)(Math.random() * 10);
 
-        // Place pits
-        int pitsPlaced = 0;
-        while(pitsPlaced < NUM_PITS){
-            int r = rand.nextInt(NUM_ROWS);
-            int c = rand.nextInt(NUM_COLS);
-            if(!grid[r][c].hasPit() && !grid[r][c].hasLadder()){
-                grid[r][c].setPit(true);
-                // place breeze around pit
-                for(int dr=-1; dr<=1; dr++){
-                    for(int dc=-1; dc<=1; dc++){
-                        int nr = r+dr, nc = c+dc;
-                        if(nr>=0 && nr<NUM_ROWS && nc>=0 && nc<NUM_COLS && !(dr==0 && dc==0))
-                            grid[nr][nc].setBreeze(true);
-                    }
-                }
-                pitsPlaced++;
-            }
+        while (grid[wumpusR][wumpusC].isPit() || grid[wumpusR][wumpusC].isLadder()) {
+            wumpusR = (int)(Math.random() * 10);
+            wumpusC = (int)(Math.random() * 10);
+        }
+        grid[wumpusR][wumpusC].setWumpus(true);
+
+        addStench(wumpusR, wumpusC);
+    }
+
+    private void addBreeze(int r, int c) {
+        if (r > 0) {
+            grid[r - 1][c].setBreeze(true);
         }
 
-        // Place Wumpus
-        while(true){
-            int r = rand.nextInt(NUM_ROWS);
-            int c = rand.nextInt(NUM_COLS);
-            if(!grid[r][c].hasPit() && !grid[r][c].hasLadder()){
-                grid[r][c].setWumpus(true);
-                // stench
-                for(int dr=-1; dr<=1; dr++){
-                    for(int dc=-1; dc<=1; dc++){
-                        int nr = r+dr, nc=c+dc;
-                        if(nr>=0 && nr<NUM_ROWS && nc>=0 && nc<NUM_COLS && !(dr==0 && dc==0))
-                            grid[nr][nc].setStench(true);
-                    }
-                }
-                break;
-            }
+        if (r < 9) {
+            grid[r + 1][c].setBreeze(true);
         }
 
-        // Place gold
-        while(true){
-            int r = rand.nextInt(NUM_ROWS);
-            int c = rand.nextInt(NUM_COLS);
-            if(!grid[r][c].hasPit() && !grid[r][c].hasLadder() && !grid[r][c].hasWumpus()){
-                grid[r][c].setGold(true);
-                break;
-            }
+        if (c > 0) {
+            grid[r][c - 1].setBreeze(true);
+        }
+
+        if (c < 9) {
+            grid[r][c + 1].setBreeze(true);
         }
     }
 
-    public WumpusSquare getSquare(int r, int c){
-        if(r>=0 && r<NUM_ROWS && c>=0 && c<NUM_COLS)
+    private void addStench(int r, int c) {
+        if (r > 0) {
+            grid[r - 1][c].setStench(true);
+        }
+        if (r < 9) {
+            grid[r + 1][c].setStench(true);
+        }
+        if (c > 0) {
+            grid[r][c - 1].setStench(true);
+        }
+        if (c < 9) {
+            grid[r][c + 1].setStench(true);
+        }
+    }
+
+    public WumpusSquare getSquare(int r, int c) {
+        if (r >= 0 && r < 10 && c >= 0 && c < 10) {
             return grid[r][c];
+        }
         return null;
     }
 
-    public int getLadderRow(){ return ladderRow; }
-    public int getLadderCol(){ return ladderCol; }
+    public int getLadderRow() {
+        return ladderRow;
+    }
+
+    public int getLadderCol() {
+        return ladderCol;
+    }
 }

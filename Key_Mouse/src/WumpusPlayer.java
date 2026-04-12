@@ -1,32 +1,57 @@
 public class WumpusPlayer {
-    public static final int NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3;
-
+    public static final int NORTH = 0;
+    public static final int EAST = 1;
+    public static final int SOUTH = 2;
+    public static final int WEST = 3;
     private int direction;
+    private int col;
+    private int row;
     private boolean arrow;
     private boolean gold;
-    private int row, col;
 
-    public WumpusPlayer(int startRow, int startCol) {
-        this.direction = NORTH;
-        this.arrow = true;
-        this.gold = false;
-        this.row = startRow;
-        this.col = startCol;
+    public WumpusPlayer() {
+        direction = NORTH;
+        arrow = true;
+        gold = false;
     }
 
-    // getters and setters
-    public int getDirection() { return direction; }
-    public void setDirection(int direction) { this.direction = direction; }
+    public int getDirection() {
+        return direction;
+    }
 
-    public boolean hasArrow() { return arrow; }
-    public void setArrow(boolean arrow) { this.arrow = arrow; }
+    public void setDirection(int d) {
+        direction = d;
+    }
 
-    public boolean hasGold() { return gold; }
-    public void setGold(boolean gold) { this.gold = gold; }
+    public boolean hasArrow() {
+        return arrow;
+    }
 
-    public int getRow() { return row; }
-    public void setRow(int row) { this.row = row; }
+    public void setArrow(boolean a) {
+        arrow = a;
+    }
 
-    public int getCol() { return col; }
-    public void setCol(int col) { this.col = col; }
+    public boolean hasGold() {
+        return gold;
+    }
+
+    public void setGold(boolean g) {
+        gold = g;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public void setCol(int c) {
+        col = c;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int r) {
+        row = r;
+    }
 }

@@ -1,32 +1,99 @@
 public class WumpusSquare {
-    private boolean pit, breeze, wumpus, deadWumpus, stench, gold, ladder, visited;
+    private boolean gold;
+    private boolean ladder;
+    private boolean pit;
+    private boolean breeze;
+    private boolean wumpus;
+    private boolean deadWumpus;
+    private boolean stench;
+    private boolean visited;
 
-    public WumpusSquare() {
-        pit = breeze = wumpus = deadWumpus = stench = gold = ladder = visited = false;
+    public boolean isGold() {
+        return gold;
     }
 
-    // getters & setters
-    public boolean hasPit() { return pit; }
-    public void setPit(boolean pit) { this.pit = pit; }
+    public void setGold(boolean b) {
+        gold = b;
+    }
 
-    public boolean hasBreeze() { return breeze; }
-    public void setBreeze(boolean breeze) { this.breeze = breeze; }
+    public boolean isLadder() {
+        return ladder;
+    }
 
-    public boolean hasWumpus() { return wumpus; }
-    public void setWumpus(boolean wumpus) { this.wumpus = wumpus; }
+    public void setLadder(boolean b) {
+        ladder = b;
+    }
 
-    public boolean isDeadWumpus() { return deadWumpus; }
-    public void setDeadWumpus(boolean deadWumpus) { this.deadWumpus = deadWumpus; }
+    public boolean isPit() {
+        return pit;
+    }
 
-    public boolean hasStench() { return stench; }
-    public void setStench(boolean stench) { this.stench = stench; }
+    public void setPit(boolean b) {
+        pit = b;
+    }
 
-    public boolean hasGold() { return gold; }
-    public void setGold(boolean gold) { this.gold = gold; }
+    public boolean isBreeze() {
+        return breeze;
+    }
 
-    public boolean hasLadder() { return ladder; }
-    public void setLadder(boolean ladder) { this.ladder = ladder; }
+    public void setBreeze(boolean b) {
+        breeze = b;
+    }
 
-    public boolean isVisited() { return visited; }
-    public void setVisited(boolean visited) { this.visited = visited; }
+    public boolean isWumpus() {
+        return wumpus;
+    }
+
+    public void setWumpus(boolean b) {
+        wumpus = b;
+    }
+
+    public boolean isDeadWumpus() {
+        return deadWumpus;
+    }
+
+    public void setDeadWumpus(boolean b) {
+        deadWumpus = b;
+    }
+
+    public boolean isStench() {
+        return stench;
+    }
+
+    public void setStench(boolean b) {
+        stench = b;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean b) {
+        visited = b;
+    }
+
+    public String toString() {
+        if (wumpus && gold) {
+            return "@";
+        }
+        if (deadWumpus && gold) {
+            return "!";
+        }
+        if (wumpus) {
+            return "W";
+        }
+        if (deadWumpus) {
+            return "D";
+        }
+        if (ladder) {
+            return "L";
+        }
+        if (pit) {
+            return "P";
+        }
+        if (gold) {
+            return "G";
+        }
+        return "*";
+    }
 }
