@@ -10,14 +10,14 @@ public class LoadNDraw_Frame extends JFrame {
     private BufferedImage floor = null;
 
     public LoadNDraw_Frame(){
-        super("Load and draw 2 Images");
+        super("Load and draw 2 WumpusWorld.Images");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         try{
-            floor = ImageIO.read((new File("src\\Images\\Floor.gif")));
-            ladder = ImageIO.read((new File("src\\Images\\ladder.gif")));
+            floor = ImageIO.read((new File("src\\WumpusWorld.Images\\Floor.gif")));
+            ladder = ImageIO.read((new File("src\\WumpusWorld.Images\\ladder.gif")));
             System.out.println("All images were loaded Properly.");
         } catch(Exception e){
-            System.out.println("Error Loading Images: " + e.getMessage());
+            System.out.println("Error Loading WumpusWorld.Images: " + e.getMessage());
             e.printStackTrace();
         }
         setSize(250,150);

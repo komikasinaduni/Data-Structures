@@ -1,3 +1,5 @@
+package WumpusWorld;
+
 public class WumpusMap
 {
     private WumpusSquare[][] grid;

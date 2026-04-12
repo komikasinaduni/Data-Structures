@@ -1,3 +1,5 @@
+package WumpusWorld;
+
 import javax.swing.JFrame;
 public class WumpusFrame extends JFrame {
     public WumpusFrame() {

@@ -1,3 +1,5 @@
+package WumpusWorld;
+
 public class WumpusSquare {
     private boolean gold;
     private boolean ladder;

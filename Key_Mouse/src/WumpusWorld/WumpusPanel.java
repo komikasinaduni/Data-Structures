@@ -1,3 +1,5 @@
+package WumpusWorld;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -41,20 +43,20 @@ public class WumpusPanel extends JPanel implements KeyListener {
 
     private void loadImages() {
         try {
-            floor = ImageIO.read(new File("src/Images/Floor.gif"));
-            fog = ImageIO.read(new File("src/Images/black.GIF"));
-            ladder = ImageIO.read(new File("src/Images/ladder.gif"));
-            arrow = ImageIO.read(new File("src/Images/arrow.gif"));
-            gold = ImageIO.read(new File("src/Images/gold.gif"));
-            pit = ImageIO.read(new File("src/Images/pit.gif"));
-            breeze = ImageIO.read(new File("src/Images/breeze.gif"));
-            wumpus = ImageIO.read(new File("src/Images/wumpus.gif"));
-            deadWumpus = ImageIO.read(new File("src/Images/deadwumpus.GIF"));
-            stench = ImageIO.read(new File("src/Images/stench.gif"));
-            playerUp = ImageIO.read(new File("src/Images/playerUp.png"));
-            playerDown = ImageIO.read(new File("src/Images/playerDown.png"));
-            playerLeft = ImageIO.read(new File("src/Images/playerLeft.png"));
-            playerRight = ImageIO.read(new File("src/Images/playerRight.png"));
+            floor = ImageIO.read(new File("src/WumpusWorld/Images/Floor.gif"));
+            fog = ImageIO.read(new File("src/WumpusWorld/Images/black.GIF"));
+            ladder = ImageIO.read(new File("src/WumpusWorld/Images/ladder.gif"));
+            arrow = ImageIO.read(new File("src/WumpusWorld/Images/arrow.gif"));
+            gold = ImageIO.read(new File("src/WumpusWorld/Images/gold.gif"));
+            pit = ImageIO.read(new File("src/WumpusWorld/Images/pit.gif"));
+            breeze = ImageIO.read(new File("src/WumpusWorld/Images/breeze.gif"));
+            wumpus = ImageIO.read(new File("src/WumpusWorld/Images/wumpus.gif"));
+            deadWumpus = ImageIO.read(new File("src/WumpusWorld/Images/deadwumpus.GIF"));
+            stench = ImageIO.read(new File("src/WumpusWorld/Images/stench.gif"));
+            playerUp = ImageIO.read(new File("src/WumpusWorld/Images/playerUp.png"));
+            playerDown = ImageIO.read(new File("src/WumpusWorld/Images/playerDown.png"));
+            playerLeft = ImageIO.read(new File("src/WumpusWorld/Images/playerLeft.png"));
+            playerRight = ImageIO.read(new File("src/WumpusWorld/Images/playerRight.png"));
         }
         catch (Exception e){
             System.out.println("Image Error: " + e.getMessage());
