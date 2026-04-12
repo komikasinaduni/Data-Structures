@@ -13,8 +13,8 @@ public class LoadNDraw_Frame extends JFrame {
         super("Load and draw 2 Images");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         try{
-            floor = ImageIO.read((new File("Images\\Floor.gif")));
-            ladder = ImageIO.read((new File("Images\\ladder.gif")));
+            floor = ImageIO.read((new File("src\\Images\\Floor.gif")));
+            ladder = ImageIO.read((new File("src\\Images\\ladder.gif")));
             System.out.println("All images were loaded Properly.");
         } catch(Exception e){
             System.out.println("Error Loading Images: " + e.getMessage());
