@@ -65,6 +65,9 @@ public class WumpusMap
     }
 
     private void addStench(int r, int c) {
+        if(r == ladderRow && c == ladderCol){
+            grid[r][c].setStench(false);
+        }
         if (r > 0) {
             grid[r - 1][c].setStench(true);
         }
