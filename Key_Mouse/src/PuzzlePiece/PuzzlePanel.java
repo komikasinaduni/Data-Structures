@@ -1,5 +1,4 @@
 package PuzzlePiece;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -15,11 +14,8 @@ public class PuzzlePanel extends JPanel implements MouseListener {
     private boolean isImageMode;
     private boolean isSolved;
     private BufferedImage fullImage;
-
-    // The "empty" piece will be represented by value 16
     private int emptyRow;
     private int emptyCol;
-
     private JButton newGameBtn;
     private JButton toggleBtn;
 
@@ -37,7 +33,7 @@ public class PuzzlePanel extends JPanel implements MouseListener {
         createNewGame();
     }
 
-    private void setupButtons() {
+    public void setupButtons() {
         newGameBtn = new JButton("New Game");
         newGameBtn.setBounds(50, 20, 120, 30);
         newGameBtn.addActionListener(e -> {
@@ -61,44 +57,59 @@ public class PuzzlePanel extends JPanel implements MouseListener {
         this.add(toggleBtn);
     }
 
-    private void loadMainImage() {
+    public void loadMainImage() {
         try {
-            // Replace with your actual image path
-            fullImage = ImageIO.read(new File("src\\WumpusWorld\\Images\\puzzle_bg.jpg"));
+            BufferedImage originalImage = ImageIO.read(new File("src/PuzzlePiece/puzzle_bg.jpeg"));
+            fullImage = new BufferedImage(400, 400, BufferedImage.TYPE_INT_ARGB);
+            Graphics g = fullImage.getGraphics();
+            g.drawImage(originalImage, 0, 0, 400, 400, null);
+            g.dispose();
         } catch (Exception e) {
             System.out.println("Error loading puzzle image: " + e.getMessage());
         }
     }
 
-    private void createNewGame() {
+    public void createNewGame() {
         grid = new PuzzlePiece[4][4];
-        ArrayList<Integer> numbers = new ArrayList<>();
-        for (int i = 1; i <= 16; i++) {
-            numbers.add(i);
-        }
-
-        // Shuffle numbers until it's solvable (simplified for beginner level)
-        Collections.shuffle(numbers);
-
-        int index = 0;
+        int count = 1;
         for (int r = 0; r < 4; r++) {
             for (int c = 0; c < 4; c++) {
-                int val = numbers.get(index);
                 BufferedImage subImg = null;
-
-                if (fullImage != null && val != 16) {
-                    // Calculate which part of the image belongs to this number
-                    int imgR = (val - 1) / 4;
-                    int imgC = (val - 1) % 4;
+                if (fullImage != null && count != 16) {
+                    int imgR = (count - 1) / 4;
+                    int imgC = (count - 1) % 4;
                     subImg = fullImage.getSubimage(imgC * 100, imgR * 100, 100, 100);
                 }
 
-                grid[r][c] = new PuzzlePiece(val, subImg);
-                if (val == 16) {
+                grid[r][c] = new PuzzlePiece(count, subImg);
+                if (count == 16) {
                     emptyRow = r;
                     emptyCol = c;
                 }
-                index++;
+                count++;
+            }
+        }
+
+        for (int i = 0; i < 100; i++) {
+            int dir = (int)(Math.random() * 4);
+            int targetR = emptyRow;
+            int targetC = emptyCol;
+            if (dir == 0) {
+                targetR--;
+            } else if (dir == 1) {
+                targetR++;
+            } else if (dir == 2) {
+                targetC--;
+            } else if (dir == 3) {
+                targetC++;
+            }
+            if (targetR >= 0 && targetR < 4 && targetC >= 0 && targetC < 4) {
+                PuzzlePiece temp = grid[targetR][targetC];
+                grid[targetR][targetC] = grid[emptyRow][emptyCol];
+                grid[emptyRow][emptyCol] = temp;
+
+                emptyRow = targetR;
+                emptyCol = targetC;
             }
         }
 
@@ -107,7 +118,7 @@ public class PuzzlePanel extends JPanel implements MouseListener {
         repaint();
     }
 
-    private void checkWin() {
+    public void checkWin() {
         int expected = 1;
         for (int r = 0; r < 4; r++) {
             for (int c = 0; c < 4; c++) {
@@ -123,19 +134,13 @@ public class PuzzlePanel extends JPanel implements MouseListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        // Background
-        g.setColor(new Color(200, 0, 200)); // Purple like the screenshot
+        g.setColor(new Color(200, 0, 200));
         g.fillRect(0, 0, 500, 600);
-
-        // Move Counter
         g.setColor(Color.BLACK);
         g.fillRect(330, 60, 120, 30);
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 16));
         g.drawString("Moves: " + moves, 340, 80);
-
-        // Draw Grid
         for (int r = 0; r < 4; r++) {
             for (int c = 0; c < 4; c++) {
                 int x = 50 + (c * 100);
@@ -147,10 +152,9 @@ public class PuzzlePanel extends JPanel implements MouseListener {
                         g.setColor(Color.BLACK);
                         g.drawRect(x, y, 100, 100);
                     } else {
-                        // Draw the "Diamond" style from the screenshot
                         g.setColor(Color.BLACK);
                         g.drawRect(x, y, 100, 100);
-                        g.setColor(new Color(100, 200, 150)); // Light green
+                        g.setColor(new Color(100, 200, 150));
                         int[] xPts = {x+50, x+100, x+50, x};
                         int[] yPts = {y, y+50, y+100, y+50};
                         g.fillPolygon(xPts, yPts, 4);
@@ -162,7 +166,6 @@ public class PuzzlePanel extends JPanel implements MouseListener {
                 }
             }
         }
-
         if (isSolved) {
             g.setColor(new Color(0, 0, 0, 150));
             g.fillRect(0, 250, 500, 100);
@@ -174,23 +177,24 @@ public class PuzzlePanel extends JPanel implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (isSolved) return;
-
+        if (isSolved) {
+            return;
+        }
         int mouseX = e.getX();
         int mouseY = e.getY();
-
-        // Convert click to grid coordinates
         int c = (mouseX - 50) / 100;
         int r = (mouseY - 100) / 100;
 
         if (r >= 0 && r < 4 && c >= 0 && c < 4) {
-            // Check if orthogonal to empty slot
             boolean isAdjacent = false;
-            if (Math.abs(r - emptyRow) == 1 && c == emptyCol) isAdjacent = true;
-            if (Math.abs(c - emptyCol) == 1 && r == emptyRow) isAdjacent = true;
+            if (Math.abs(r - emptyRow) == 1 && c == emptyCol) {
+                isAdjacent = true;
+            }
+            if (Math.abs(c - emptyCol) == 1 && r == emptyRow) {
+                isAdjacent = true;
+            }
 
             if (isAdjacent) {
-                // Swap pieces
                 PuzzlePiece temp = grid[r][c];
                 grid[r][c] = grid[emptyRow][emptyCol];
                 grid[emptyRow][emptyCol] = temp;
@@ -204,9 +208,16 @@ public class PuzzlePanel extends JPanel implements MouseListener {
         }
     }
 
-    // Unused MouseListener methods
-    public void mouseClicked(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
+    public void mouseClicked(MouseEvent e) {
+
+    }
+    public void mouseReleased(MouseEvent e) {
+
+    }
+    public void mouseEntered(MouseEvent e) {
+
+    }
+    public void mouseExited(MouseEvent e) {
+
+    }
 }
